@@ -9,7 +9,7 @@ use App\Http\Controllers\Controller;
 use GuzzleHttp\Exception\RequestException;
 
 
-class APIController extends Controller
+class LinkedinController extends Controller
 {
     public function signin(Request $request)
     {
@@ -40,7 +40,8 @@ class APIController extends Controller
         $userID = decrypt($state);
         $user = User::find($userID);
         if (!$user) {
-            dd('User not available');
+            // dd('User not available');
+            return redirect()->back()->with('alert', 'User is not available');
         }
 
         $client = new Client([
@@ -81,10 +82,10 @@ class APIController extends Controller
 
     public function disconnect()
     {
-        $user = auth()->user();
-        $user->access_token = null;
-        $user->save();
-
+        // $user = auth()->user();
+        // $user->access_token = null;
+        // $user->save();
+        User::find(auth()->user()->id)->update(['access_token' => null]);
         // Optionally, you can redirect the user or return a response.
         return redirect()->back()->with('success', 'Successfully disconnected from LinkedIn.');
 

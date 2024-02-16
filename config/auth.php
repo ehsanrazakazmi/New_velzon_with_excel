@@ -1,5 +1,7 @@
 <?php
 
+use App\Models\CustomNotification;
+
 return [
 
     /*
@@ -69,10 +71,10 @@ return [
         //     'driver' => 'database',
         //     'table' => 'users',
         // ],
-        
+
         'notifications' => [
             'driver' => 'database',
-            'model' => App\Models\CustomNotification::class,
+            'model' => CustomNotification::class,
         ],
     ],
 

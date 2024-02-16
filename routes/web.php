@@ -6,13 +6,14 @@ use App\Http\Middleware\Subscribed;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Middleware\SubscribedToPlan;
-use App\Http\Controllers\API\APIController;
+use App\Http\Controllers\API\LinkedinController;
 use App\Http\Controllers\Stripe\PlanController;
 use App\Http\Controllers\Stripe\CheckoutController;
 use App\Http\Controllers\Stripe\SubscriptionController;
 use App\Http\Controllers\UserManagement\RoleController;
 use App\Http\Controllers\UserManagement\UserController;
 use App\Http\Controllers\UserManagement\ProductController;
+use App\Http\Controllers\UserManagement\ProfileController;
 
 /*
 |--------------------------------------------------------------------------
@@ -33,7 +34,7 @@ Route::get('/', [App\Http\Controllers\HomeController::class, 'root'])->name('roo
 
 Route::group(['middleware' => ['auth']], function () {
 
-    Route::controller(APIController::class)->group(function (){
+    Route::controller(LinkedinController::class)->group(function (){
         Route::get('auth/linkedin', 'signin')->name('auth_linkedin');
         Route::get('/linkedin/callback', 'callback')->name('callback');
         Route::post('/disconnet', 'disconnect')->name('disconnect_linkedin');
@@ -91,6 +92,9 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::post('/products/{product}/pay', [CheckoutController::class, 'makePayment'])->name('products.pay');
 
+
+    //----------------------------------- Stripe comments, will be used if needed--------------------------------
+
     // Route::get('/checkout/{product}', [CheckoutController::class, 'checkout'])->name('checkout');
     // Route::post('/checkout/{product}', [CheckoutController::class, 'charge'])->name('checkout.charge');
 
@@ -103,6 +107,8 @@ Route::group(['middleware' => ['auth']], function () {
     //     Route::post('/subscription', 'subscription')->name("subscription.create");
 
     // });
+
+    // -----------------------------------------------------------------------------------------------------------
 
     Route::controller(SubscriptionController::class)->group(function () {
         Route::middleware([SubscribedToPlan::class])->group(function () {
@@ -134,6 +140,10 @@ Route::group(['middleware' => ['auth']], function () {
 
 
 //Update User Details
+Route::get('profile/view', [ProfileController::class, 'getprofile']);
+Route::get('profile/edit/page', [ProfileController::class, 'viewedit']);
+Route::post('profile/edit/store', [ProfileController::class, 'store'])->name('store.profile');
+
 // Route::post('/update-profile/{id}', [App\Http\Controllers\HomeController::class, 'updateProfile'])->name('updateProfile');
 // Route::post('/update-password/{id}', [App\Http\Controllers\HomeController::class, 'updatePassword'])->name('updatePassword');
 
