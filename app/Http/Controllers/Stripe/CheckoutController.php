@@ -16,6 +16,7 @@ class CheckoutController extends Controller
 
     public function makePayment(Request $request, $productId)
     {
+        
         $product = Product::find($productId);
 
         // Check if the user has a Stripe ID

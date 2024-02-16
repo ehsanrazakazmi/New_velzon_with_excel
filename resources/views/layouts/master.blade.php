@@ -18,6 +18,31 @@
     <!-- Begin page -->
     <div id="layout-wrapper">
         @include('layouts.topbar')
+        <div class="modal fade bs-example-modal-center" tabindex="-1" role="dialog"
+        aria-labelledby="mySmallModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-body text-center p-5">
+                    <script src="https://cdn.lordicon.com/lordicon-1.4.1.js"></script>
+                    <lord-icon src="https://cdn.lordicon.com/wpyrrmcq.json"
+                        trigger="hover" style="width:150px;height:150px">
+                    </lord-icon>
+                    <div class="mt-4">
+                        <h4 class="mb-3">You are trying to disconnect with linkedin</h4>
+                        <p class="text-muted mb-4">Are you sure want to disconnect?</p>
+                        <div class="hstack gap-2 justify-content-center">
+                            <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
+                            <form method="POST" action="{{ route('disconnect_linkedin') }}">
+                                @csrf
+                                @method('POST')
+                                <button type="submit" class="btn btn-danger">Disconnect from LinkedIn</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
         @include('layouts.sidebar')
         <!-- ============================================================== -->
         <!-- Start right Content here -->

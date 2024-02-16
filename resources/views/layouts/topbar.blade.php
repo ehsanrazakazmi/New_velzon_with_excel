@@ -101,8 +101,8 @@
                     <div class="dropdown-menu dropdown-menu-end">
 
                         <!-- item-->
-                        <a href="{{ url('index/en') }}" class="dropdown-item notify-item language py-2"
-                            data-lang="en" title="English">
+                        <a href="{{ url('index/en') }}" class="dropdown-item notify-item language py-2" data-lang="en"
+                            title="English">
                             <img src="{{ URL::asset('assets/images/flags/us.svg') }}" alt="user-image"
                                 class="me-2 rounded" height="18">
                             <span class="align-middle">English</span>
@@ -156,16 +156,6 @@
                         </a>
                     </div>
                 </div>
-
-                {{-- <div class="dropdown topbar-head-dropdown ms-1 header-item">
-                    <button type="button" class="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle">
-                        <a href="{{ route('plans.all.update') }}">
-
-                            <i class="ri-refresh-line"></i>
-                        </a>
-                    </button>
-                </div> --}}
-
 
                 <div class="ms-1 header-item d-none d-sm-flex">
                     <button type="button" class="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle"
@@ -498,7 +488,6 @@
                             <span class="text-start ms-xl-2">
                                 <span
                                     class="d-none d-xl-inline-block ms-1 fw-medium user-name-text">{{ Auth::user()->name }}</span>
-                                {{-- <span class="d-none d-xl-block ms-1 fs-12 text-muted user-name-sub-text">Founder</span> --}}
                             </span>
                         </span>
                     </button>
@@ -508,12 +497,51 @@
                         <a class="dropdown-item" href="pages-profile"><i
                                 class="mdi mdi-account-circle text-muted fs-16 align-middle me-1"></i> <span
                                 class="align-middle">Profile</span></a>
-                        <a class="dropdown-item" href="apps-chat"><i
-                                class="mdi mdi-message-text-outline text-muted fs-16 align-middle me-1"></i> <span
-                                class="align-middle">Messages</span></a>
+                        @if (!auth()->user()->access_token)
+                            <a class="dropdown-item" href="{{ route('auth_linkedin') }}">
+                                <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="20" height="20"
+                                    viewBox="0,0,256,256">
+                                    <g fill="#030303" fill-rule="nonzero" stroke="none" stroke-width="1"
+                                        stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10"
+                                        stroke-dasharray="" stroke-dashoffset="0" font-family="none"
+                                        font-weight="none" font-size="none" text-anchor="none"
+                                        style="mix-blend-mode: normal">
+                                        <g transform="scale(10.66667,10.66667)">
+                                            <path
+                                                d="M5,3c-1.105,0 -2,0.895 -2,2v14c0,1.105 0.895,2 2,2h14c1.105,0 2,-0.895 2,-2v-14c0,-1.105 -0.895,-2 -2,-2zM5,5h14v14h-14zM7.7793,6.31641c-0.857,0 -1.37109,0.51517 -1.37109,1.20117c0,0.686 0.51416,1.19922 1.28516,1.19922c0.857,0 1.37109,-0.51322 1.37109,-1.19922c0,-0.686 -0.51416,-1.20117 -1.28516,-1.20117zM6.47656,10v7h2.52344v-7zM11.08203,10v7h2.52344v-3.82617c0,-1.139 0.81264,-1.30273 1.05664,-1.30273c0.244,0 0.89649,0.24473 0.89649,1.30273v3.82617h2.44141v-3.82617c0,-2.197 -0.97627,-3.17383 -2.19727,-3.17383c-1.221,0 -1.87226,0.40656 -2.19726,0.97656v-0.97656z">
+                                            </path>
+                                        </g>
+                                    </g>
+                                </svg>
+                                <span class="align-middle">Connect with linkedin</span></a>
+                        @else
+                            <a class="dropdown-item"  data-bs-toggle="modal"
+                            data-bs-target=".bs-example-modal-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="20" height="20"
+                                    viewBox="0,0,256,256">
+                                    <g fill="#030303" fill-rule="nonzero" stroke="none" stroke-width="1"
+                                        stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10"
+                                        stroke-dasharray="" stroke-dashoffset="0" font-family="none"
+                                        font-weight="none" font-size="none" text-anchor="none"
+                                        style="mix-blend-mode: normal">
+                                        <g transform="scale(10.66667,10.66667)">
+                                            <path
+                                                d="M5,3c-1.105,0 -2,0.895 -2,2v14c0,1.105 0.895,2 2,2h14c1.105,0 2,-0.895 2,-2v-14c0,-1.105 -0.895,-2 -2,-2zM5,5h14v14h-14zM7.7793,6.31641c-0.857,0 -1.37109,0.51517 -1.37109,1.20117c0,0.686 0.51416,1.19922 1.28516,1.19922c0.857,0 1.37109,-0.51322 1.37109,-1.19922c0,-0.686 -0.51416,-1.20117 -1.28516,-1.20117zM6.47656,10v7h2.52344v-7zM11.08203,10v7h2.52344v-3.82617c0,-1.139 0.81264,-1.30273 1.05664,-1.30273c0.244,0 0.89649,0.24473 0.89649,1.30273v3.82617h2.44141v-3.82617c0,-2.197 -0.97627,-3.17383 -2.19727,-3.17383c-1.221,0 -1.87226,0.40656 -2.19726,0.97656v-0.97656z">
+                                            </path>
+                                        </g>
+                                    </g>
+                                </svg> Disconnect
+                                </a>
+                        @endif
+
+
+
+
+
+
                         <a class="dropdown-item" href="apps-tasks-kanban"><i
-                                class="mdi mdi-calendar-check-outline text-muted fs-16 align-middle me-1"></i>Your current card: <span
-                                class="badge bg-info">{{auth()->user()->pm_type}}</span></a>
+                                class="mdi mdi-calendar-check-outline text-muted fs-16 align-middle me-1"></i>Your
+                            current card: <span class="badge bg-info">{{ auth()->user()->pm_type }}</span></a>
                         <a class="dropdown-item" href="pages-faqs"><i
                                 class="mdi mdi-lifebuoy text-muted fs-16 align-middle me-1"></i> <span
                                 class="align-middle">Help</span></a>
@@ -567,4 +595,5 @@
             </div>
         </div>
     </div>
+
 </header>

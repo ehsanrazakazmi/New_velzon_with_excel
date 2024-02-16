@@ -5,13 +5,14 @@ use App\Http\Middleware\Subscribed;
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use App\Http\Middleware\SubscribedToPlan;
+use App\Http\Controllers\API\APIController;
 use App\Http\Controllers\Stripe\PlanController;
 use App\Http\Controllers\Stripe\CheckoutController;
 use App\Http\Controllers\Stripe\SubscriptionController;
 use App\Http\Controllers\UserManagement\RoleController;
 use App\Http\Controllers\UserManagement\UserController;
 use App\Http\Controllers\UserManagement\ProductController;
-use App\Http\Middleware\SubscribedToPlan;
 
 /*
 |--------------------------------------------------------------------------
@@ -31,6 +32,13 @@ Route::get('index/{locale}', [App\Http\Controllers\HomeController::class, 'lang'
 Route::get('/', [App\Http\Controllers\HomeController::class, 'root'])->name('root');
 
 Route::group(['middleware' => ['auth']], function () {
+
+    Route::controller(APIController::class)->group(function (){
+        Route::get('auth/linkedin', 'signin')->name('auth_linkedin');
+        Route::get('/linkedin/callback', 'callback')->name('callback');
+        Route::post('/disconnet', 'disconnect')->name('disconnect_linkedin');
+    });
+
 
     // Role functionality
     Route::controller(RoleController::class)->group(function () {
