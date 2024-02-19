@@ -15,8 +15,12 @@
         <div class="row g-4">
             <div class="col-auto">
                 <div class="avatar-lg">
-                    <img src="@if (Auth::user()->avatar != '') {{ URL::asset('images/' . Auth::user()->avatar) }}@else{{ URL::asset('assets/images/users/avatar-1.jpg') }} @endif"
-                        alt="user-img" class="img-thumbnail rounded-circle" />
+                    <img src="{{ asset('storage/'.Auth::user()->profile_photo_path) }}"
+                    alt="user-img"
+                    class="img-thumbnail rounded-circle"
+                    style="width: 100px; height: 100px; object-fit: cover;"
+               />
+
                 </div>
             </div>
             <!--end col-->
@@ -88,7 +92,7 @@
                         </li>
                     </ul>
                     <div class="flex-shrink-0">
-                        <a href="{{ URL::asset('/pages-profile-settings') }}" class="btn btn-success"><i
+                        <a href="{{route('edit.profile')}}" class="btn btn-success"><i
                                 class="ri-edit-box-line align-bottom"></i> Edit Profile</a>
                     </div>
                 </div>

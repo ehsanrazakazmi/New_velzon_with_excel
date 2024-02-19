@@ -25,14 +25,14 @@
                 <div class="card-body p-4">
                     <div class="text-center">
                         <div class="profile-user position-relative d-inline-block mx-auto  mb-4">
-                            <img src=""
+                            <img src="{{ asset('storage/'.Auth::user()->profile_photo_path) }}"
                                 class="rounded-circle avatar-xl img-thumbnail user-profile-image" alt="user-profile-image">
                             <div class="avatar-xs p-0 rounded-circle profile-photo-edit">
                                 <input id="profile_photo_path" name="profile_photo_path" type="file" class="profile-img-file-input">
                                 <label for="profile-img-file-input" class="profile-photo-edit avatar-xs">
-                                    <span class="avatar-title rounded-circle bg-light text-body">
+                                    {{-- <span class="avatar-title rounded-circle bg-light text-body">
                                         <i class="ri-camera-fill"></i>
-                                    </span>
+                                    </span> --}}
                                 </label>
                             </div>
                         </div>
@@ -61,11 +61,12 @@
                     <div class="tab-content">
                         <div class="tab-pane active" id="personalDetails" role="tabpanel">
                             <form action="{{route('store.profile')}}" method="post" enctype="multipart/form-data">
+                                @csrf
                                 <div class="row">
                                     <div class="col-lg-6">
                                         <div class="mb-3">
                                             <label for="name" class="form-label">Name</label>
-                                            <input type="text" class="form-control" id="name"
+                                            <input type="text" class="form-control" id="name" name="name"
                                                 placeholder="Enter your firstname" value="Dave">
                                         </div>
                                     </div>
@@ -76,7 +77,7 @@
                                         <div class="mb-3">
                                             <label for="email" class="form-label">Email
                                                 Address</label>
-                                            <input type="email" class="form-control" id="email"
+                                            <input type="email" class="form-control" id="email" name="email"
                                                 placeholder="Enter your email" value="daveadame@velzon.com">
                                         </div>
                                     </div>
@@ -94,7 +95,6 @@
                                     <div class="col-lg-12">
                                         <div class="hstack gap-2 justify-content-end">
                                             <button type="submit" class="btn btn-primary">Updates</button>
-                                            <button type="button" class="btn btn-soft-success">Cancel</button>
                                         </div>
                                     </div>
                                     <!--end col-->
