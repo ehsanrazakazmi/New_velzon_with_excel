@@ -6,7 +6,7 @@ use App\Http\Middleware\Subscribed;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Middleware\SubscribedToPlan;
-use App\Http\Controllers\API\LinkedinController;
+use App\Http\Controllers\SocialChannels\LinkedinController;
 use App\Http\Controllers\Stripe\PlanController;
 use App\Http\Controllers\Stripe\CheckoutController;
 use App\Http\Controllers\Stripe\SubscriptionController;
