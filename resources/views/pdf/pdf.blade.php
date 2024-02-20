@@ -60,21 +60,21 @@
             <td>
                 {{-- <img src="{{$base64}}" style="max-width: 200px; height: auto;"> --}}
                 <img src="{{ $nerdflow }}" alt="Example Image" style="max-width: 150px; height: auto;">
-    
+
             </td>
             <td class="w-half">
                 <h2>Invoice ID: {{$randomNumber}}</h2>
             </td>
         </tr>
     </table>
- 
+
     <div class="margin-top">
         <table class="w-full">
             <tr>
                 <td class="w-half">
                     <div><h4>To:</h4></div>
                     <div>Mr. Hadi Butt</div>
-                    
+
                 </td>
                 <td class="w-half">
                     <div><h4>From:</h4></div>
@@ -84,7 +84,7 @@
             </tr>
         </table>
     </div>
- 
+
     <div class="margin-top">
         <table class="products">
             <thead>
@@ -98,7 +98,7 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach($data as $key => $item)
+                @foreach($product as $key => $item)
                     <tr>
                         <td>{{$key+1}}</td>
                         <td>{{ $item->name }}</td>
@@ -111,13 +111,13 @@
             </tbody>
         </table>
     </div>
-    
+
     <div class="total">
         Total Bill:
         <br>
         ${{$totalprice}}
     </div>
- 
+
     <div class="footer margin-top">
         <div>Thank you</div>
         <div>&copy; NERDFLOW</div>

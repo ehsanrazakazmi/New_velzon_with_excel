@@ -33,26 +33,6 @@ class ProductController extends Controller
 
     public function store(Request $request)
     {
-        // $user = auth()->user();
-
-        // // Get the user's plan and set the product limit accordingly
-        // $subscription = $user->subscription('default');
-        // $plan = Plan::find($subscription->plan_id);
-        // $productLimit = 0;
-        // if ($plan == 'Basic') {
-        //     $productLimit = 2;
-        // } elseif ($plan == 'professional') {
-        //     $productLimit = 10;
-        // } elseif ($plan == 'enterprise') {
-        //     $productLimit = 15;
-        // }
-
-        // // Check if the user has reached their product limit
-        // $productCount = Product::where('user_id', $user->id)->count();
-        // if ($productCount >= $productLimit) {
-        //     return redirect()->back()->with('warning', 'You have reached your product limit for your current plan.');
-        // } else {
-
             // validates the name and detail
             $validator = Validator::make($request->all(), [
                 'name' => 'required',
@@ -70,7 +50,7 @@ class ProductController extends Controller
 
             // it will store the validated data into the database
             $request->merge(['user_id' => auth()->user()->id]);
-            // dd($request->all());
+
             Product::create($request->all());
 
             $data = ['name' => $request->name, 'detail' => $request->detail, 'price' => $request->price,  'creator' => auth()->user()->name];
@@ -155,11 +135,11 @@ class ProductController extends Controller
 
         $nerdflow = public_path('images/nerdflow.jfif');
 
-        $data = Product::all();
-        $totalprice = $data->sum('price');
+        $product = Product::all();
+        $totalprice = $product->sum('price');
         $randomNumber = mt_rand(100000000, 999999999);
 
-        $pdf = Pdf::loadView('pdf.pdf', compact('data', 'base64', 'totalprice', 'randomNumber', 'nerdflow'));
+        $pdf = Pdf::loadView('pdf.pdf', compact('product', 'base64', 'totalprice', 'randomNumber', 'nerdflow'));
         return $pdf->download('webappfix.pdf');
     }
 }

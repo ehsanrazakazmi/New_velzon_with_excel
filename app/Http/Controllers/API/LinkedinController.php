@@ -73,20 +73,16 @@ class LinkedinController extends Controller
             if ($e->hasResponse()) {
                 $response = $e->getResponse();
                 $statusCode = $response->getStatusCode();
-                dd("Request failed with status code: $statusCode");
+                return redirect()->back()->with('error', $statusCode);
             } else {
-                dd("Request failed: " . $e->getMessage());
+                return redirect()->back('error', $e->getMessage());
             }
         }
     }
 
     public function disconnect()
     {
-        // $user = auth()->user();
-        // $user->access_token = null;
-        // $user->save();
         User::find(auth()->user()->id)->update(['access_token' => null]);
-        // Optionally, you can redirect the user or return a response.
         return redirect()->back()->with('success', 'Successfully disconnected from LinkedIn.');
 
     }
