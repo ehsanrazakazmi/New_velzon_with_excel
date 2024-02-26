@@ -30,26 +30,36 @@
                 <div class="card-body">
                     <div id="customerList">
                         <div class="row g-4 mb-3">
-                            {!! Form::model($role, ['method' => 'PATCH', 'route' => ['role.update', encrypt($role->id)]]) !!}
+                            <form method="POST" action="{{ route('role.update', encrypt($role->id)) }}">
+                                @method('PATCH')
+                                @csrf
+
                                 <div class="mb-3">
                                     <label for="basicInput" class="form-label">Name: </label>
-                                    {!! Form::text('name', null, ['placeholder' => 'Name', 'class' => 'form-control', 'required' => 'required']) !!}
+                                    <input type="text" name="name" value="{{ old('name', $role->name) }}" placeholder="Name" class="form-control" required>
                                 </div>
 
                                 <div class="mb-3">
                                     <label for="description" class="form-label">Description</label>
-                                    {!! Form::textarea('description', $role->description ?? null, ['placeholder' => 'Description', 'class' => 'form-control', 'rows' => '2', 'required' => 'required' ]) !!}
+                                    <textarea name="description" placeholder="Description" class="form-control" rows="2" required>{{ old('description', $role->description) }}</textarea>
                                 </div>
 
                                 <div class="mb-3">
                                     <label for="choices-multiple-default" class="form-label text-muted">Permissions</label>
                                     <br>
-                                    {!! Form::select('permission[]', $permission->pluck('name', 'name'), $role->permissions->pluck('name'), ['class' => 'js-example-basic-multiple', 'multiple' => 'multiple', 'required' => 'required']) !!}
+                                    <select name="permission[]" class="js-example-basic-multiple" multiple required>
+                                        @foreach($permission as $perm)
+                                            <option value="{{ $perm->name }}" {{ in_array($perm->name, $role->permissions->pluck('name')->toArray()) ? 'selected' : '' }}>
+                                                {{ $perm->name }}
+                                            </option>
+                                        @endforeach
+                                    </select>
                                 </div>
 
                                 <button type="submit" class="btn btn-success btn-sm mt-2">Update</button>
                                 <a style="margin-left:3px;" class="btn btn-danger btn-sm mt-2" type="button" href="{{ url('/roles/list') }}">Cancel</a>
-                            {!! Form::close() !!}
+                            </form>
+
                         </div>
                     </div>
                 </div><!-- end card -->
