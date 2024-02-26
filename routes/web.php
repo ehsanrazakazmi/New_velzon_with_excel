@@ -144,7 +144,4 @@ Route::get('profile/view', [ProfileController::class, 'getprofile'])->name('view
 Route::get('profile/edit/page', [ProfileController::class, 'viewedit'])->name('edit.profile');
 Route::post('profile/edit/store', [ProfileController::class, 'store'])->name('store.profile');
 
-// Route::post('/update-profile/{id}', [App\Http\Controllers\HomeController::class, 'updateProfile'])->name('updateProfile');
-// Route::post('/update-password/{id}', [App\Http\Controllers\HomeController::class, 'updatePassword'])->name('updatePassword');
-
 Route::get('{any}', [App\Http\Controllers\HomeController::class, 'index'])->name('index');

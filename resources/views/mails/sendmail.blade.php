@@ -60,21 +60,21 @@
             <td>
                 {{-- <img src="{{$base64}}" style="max-width: 200px; height: auto;"> --}}
                 <img src="{{ $nerdflow }}" alt="Example Image" style="max-width: 150px; height: auto;">
-    
+
             </td>
             <td class="w-half">
                 <h2>Invoice ID: {{$invoiceNumber}}</h2>
             </td>
         </tr>
     </table>
- 
+
     <div class="margin-top">
         <table class="w-full">
             <tr>
                 <td class="w-half">
                     <div><h4>To:</h4></div>
                     <div>{{auth()->user()->name}}</div>
-                    
+
                 </td>
                 <td class="w-half">
                     <div><h4>From:</h4></div>
@@ -84,7 +84,7 @@
             </tr>
         </table>
     </div>
- 
+
     <div class="margin-top">
         <table class="products">
             <thead>
@@ -92,29 +92,27 @@
                     <th>Name</th>
                     <th>Description</th>
                     <th>Price</th>
-                   
+
                 </tr>
             </thead>
             <tbody>
                     <tr>
                         <td>{{$post['name']}}</td>
                         <td> {{$post['detail']}}</td>
-                        <td> {{$post['price']}}</td>                    
+                        <td> {{$post['price']}}</td>
                     </tr>
             </tbody>
         </table>
     </div>
-    
+
     <div class="total">
         Total Bill:
         <br>
-        {{-- ${{$totalprice}} --}}
     </div>
- 
+
     <div class="footer margin-top">
         <div>Thank you</div>
         <div>&copy; NERDFLOW</div>
-        {{-- <img src="{{ $nerdflow }}" alt="Example Image" style="max-width: 100px; height: auto;"> --}}
     </div>
 </body>
 </html>

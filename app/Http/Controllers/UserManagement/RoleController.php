@@ -72,11 +72,16 @@ class RoleController extends Controller
     public function update(Request $request, $id)
     {
         $id = decrypt($id);
-        $this->validate($request, [
+        $validator = Validator::make($request->all(), [
             'name' => 'required',
             'description' => 'nullable|string',
             'permission' => 'required',
         ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
+
 
         $role = Role::find($id);
         $role->name = $request->input('name');

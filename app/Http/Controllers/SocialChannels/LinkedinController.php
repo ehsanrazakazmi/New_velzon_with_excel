@@ -40,14 +40,11 @@ class LinkedinController extends Controller
         $userID = decrypt($state);
         $user = User::find($userID);
         if (!$user) {
-            // dd('User not available');
             return redirect()->back()->with('alert', 'User is not available');
         }
-
         $client = new Client([
             'verify' => false,
         ]);
-
         try {
             $response = $client->post('https://www.linkedin.com/oauth/v2/accessToken', [
                 'form_params' => [
@@ -84,6 +81,5 @@ class LinkedinController extends Controller
     {
         User::find(auth()->user()->id)->update(['access_token' => null]);
         return redirect()->back()->with('success', 'Successfully disconnected from LinkedIn.');
-
     }
 }

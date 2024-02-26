@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Stripe;
 use Exception;
 use Stripe\Plan;
 use App\Models\User;
+use App\Services\savePlan;
 use Illuminate\Http\Request;
 use Laravel\Cashier\Cashier;
 use App\Models\Plan as ModelPlan;
@@ -15,39 +16,19 @@ use Illuminate\Support\Facades\Auth;
 
 class SubscriptionController extends Controller
 {
+    protected $stripeService;
+
+    public function __construct(savePlan $stripeService)
+    {
+        $this->stripeService = $stripeService;
+    }
     public function showPlanForm()
     {
         return view('stripe.plans.create');
     }
     public function savePlan(Request $request)
     {
-        \Stripe\Stripe::setApiKey(config('services.stripe.secret'));
-        $amount = ($request->amount * 100);
-        try {
-            $plan = Plan::create([
-                'amount' => $amount,
-                'currency' => $request->currency,
-                'interval' => $request->billing_period,
-                // 'interval' => 'week',
-                'interval_count' => $request->interval_count,
-                'product' => [
-                    'name' => $request->name
-                ]
-            ]);
-
-            ModelPlan::create([
-                'plan_id' => $plan->id,
-                'name' => $request->name,
-                // 'name' => $plan->product->name,
-                'price' => $plan->amount,
-                'billing_method' => $plan->interval,
-                'currency' => $plan->currency,
-                'interval_count' => $plan->interval_count,
-            ]);
-        } catch (Exception $ex) {
-            dd($ex->getMessage());
-        }
-        return redirect()->route('plans.create');
+        return $this->stripeService->savePlan($request);
     }
 
     public function allPlans()
@@ -60,8 +41,7 @@ class SubscriptionController extends Controller
         $saal = ModelPlan::where('billing_method', 'year')->first();
         $user = auth()->user();
         $intent = $user->createSetupIntent();
-        // dd($intent);
-        return view('stripe.plans', compact('basic', 'professional', 'enterprise', 'hafta', 'mahina', 'saal', 'intent'));
+        return view('stripe.subscribe.plans', compact('basic', 'professional', 'enterprise', 'hafta', 'mahina', 'saal', 'intent'));
     }
 
     public function checkout(Request $request)
@@ -71,7 +51,6 @@ class SubscriptionController extends Controller
         if ($user->subscribed()) {
             return 'false';
         }
-
 
         // $planId = $request->plan_id;
         $planId = $request->planId;
@@ -88,26 +67,21 @@ class SubscriptionController extends Controller
 
     public function processPlan(Request $request)
     {
-        // dd($request->all());
-        // dd($request->all());
+
         $user = auth()->user();
         $user->createOrGetStripeCustomer();
-        // dd($user->createOrGetStripeCustomer());
-        // dd($request->all());
-        $paymentMethod = null;
+        // $paymentMethod = null;
         $paymentMethod = $request->payment_method;
 
         if ($paymentMethod != null) {
             $paymentMethod = $user->addPaymentMethod($paymentMethod);
         }
         $plan = $request->plan_id;
-        // $planName = ModelPlan::where('plan_id', $plan)->value('name'); // Get the plan name
 
         try {
             $user->newSubscription(
                 'default', // Use the plan name as the subscription name
                 $plan
-
             )->create($paymentMethod != null ? $paymentMethod->id : '');
         } catch (Exception $ex) {
             return back()->withErrors([
@@ -122,11 +96,9 @@ class SubscriptionController extends Controller
     {
         $user = auth()->user();
         $invoices = $user->invoices();
-
         $subscriptions = Subscription::where('user_id', auth()->id())->get();
         return view('stripe.subscriptions.index', compact('subscriptions', 'invoices'));
     }
-
     public function cancelSubscriptions(Request $request)
     {
         $subscriptionName = $request->subscriptionName;
@@ -136,7 +108,6 @@ class SubscriptionController extends Controller
             return 'subsc is canceled';
         }
     }
-
     public function resumeSubscriptions(Request $request)
     {
         $subscriptionName = $request->subscriptionName;
@@ -161,15 +132,12 @@ class SubscriptionController extends Controller
     public function updateSubscription($subscriptionName)
     {
         $user = auth()->user();
-
         $subscription = $user->subscription('default');
-
         if (!$subscription) {
             return back()->withErrors([
                 'message' => 'Unable to locate the subscription.'
             ]);
         }
-
         // $plans = ModelPlan::all(); // Adjust this based on your plan retrieval logic
         $plan = ModelPlan::where('plan_id', $subscriptionName)->first();
         return view('stripe.plans.update', [
@@ -182,10 +150,9 @@ class SubscriptionController extends Controller
 
     public function processUpdate(Request $request)
     {
-
         $user = auth()->user();
         $user->createOrGetStripeCustomer();
-        $paymentMethod = null;
+        // $paymentMethod = null;
         $paymentMethod = $request->payment_method;
 
         if ($paymentMethod != null) {

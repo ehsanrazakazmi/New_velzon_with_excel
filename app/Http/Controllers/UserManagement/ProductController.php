@@ -22,45 +22,43 @@ class ProductController extends Controller
     }
     //-----------------------------------------------------------------------------------------------------------------------------
 
-
-
     public function index()
     {
         $products = Product::with('user')->get();     // gets products by latest arrangement
         return view('Product-Management.Products.list', compact('products'))->with('i', (request()->input('page', 1) - 1) * 5);
     }
 
-
     public function store(Request $request)
     {
-            // validates the name and detail
-            $validator = Validator::make($request->all(), [
-                'name' => 'required',
-                'detail' => 'required',
-                'price' => 'required|numeric',
-                'date' => 'nullable|date',
-                'quantity' => 'nullable|integer',
-                'currency' => 'required',
-            ]);
+        // validates the name and detail
+        $validator = Validator::make($request->all(), [
+            'name' => 'required',
+            'detail' => 'required',
+            'price' => 'required|numeric',
+            'date' => 'nullable|date',
+            'quantity' => 'nullable|integer',
+            'currency' => 'required',
+        ]);
 
-            // prints the follwing statement if validation fails
-            if ($validator->fails()) {
-                return redirect()->back()->with('warning', 'Cannot add duplicate product');
-            }
+        // prints the follwing statement if validation fails
+        if ($validator->fails()) {
+            return redirect()->back()->with('warning', 'Cannot add duplicate product');
+        }
 
-            // it will store the validated data into the database
-            $request->merge(['user_id' => auth()->user()->id]);
+        // it will store the validated data into the database
+        $request->merge(['user_id' => auth()->user()->id]);
 
-            Product::create($request->all());
+        //except token
+        Product::create($request->all());
 
-            $data = ['name' => $request->name, 'detail' => $request->detail, 'price' => $request->price,  'creator' => auth()->user()->name];
+        $data = ['name' => $request->name, 'detail' => $request->detail, 'price' => $request->price,  'creator' => auth()->user()->name];
 
-            //event called here....
-            // event(new ProductCreated($data));
+        //event called here....
+        // event(new ProductCreated($data));
 
-            // redirect back to the list page after
-            return redirect()->route('product.index')
-                ->with('success', 'Product created successfully.');
+        // redirect back to the list page after
+        return redirect()->route('product.index')
+            ->with('success', 'Product created successfully.');
         // }
     }
 
@@ -74,15 +72,19 @@ class ProductController extends Controller
     public function update(Request $request, $id)
     {
         $id = decrypt($id);
-        request()->validate([
+        $validator = Validator::make($request->all(), [
             'name' => 'required',
             'detail' => 'required',
             'price' => 'required|numeric',
             'date' => 'nullable|date',
             'quantity' => 'nullable|integer',
             'currency' => 'required',
-
         ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
+
         Product::find($id)->update(
             [
                 'name' => $request->name,
@@ -113,14 +115,13 @@ class ProductController extends Controller
 
     public function importproduct(Request $request)
     {
-        // dd('import');
-
         Excel::import(new ProductImport, $request->file('file'));
         return redirect()->back();
     }
 
     public function downloadpdf()
     {
+        //add comments
         $avatarUrl = public_path('/assets/images/shopify-logo.png');
         $arrContextOptions = array(
             "ssl" => array(
