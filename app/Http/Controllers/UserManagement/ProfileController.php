@@ -13,12 +13,12 @@ class ProfileController extends Controller
 {
     public function getprofile()
     {
-        return view('User-management/profile/view');
+        return view('User-management/Users/profile/view');
     }
 
     public function viewedit()
     {
-        return view('User-management/profile/edit');
+        return view('User-management/Users/profile/edit');
     }
     public function store(Request $request)
     {

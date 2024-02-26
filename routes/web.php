@@ -12,7 +12,7 @@ use App\Http\Controllers\Stripe\CheckoutController;
 use App\Http\Controllers\Stripe\SubscriptionController;
 use App\Http\Controllers\UserManagement\RoleController;
 use App\Http\Controllers\UserManagement\UserController;
-use App\Http\Controllers\UserManagement\ProductController;
+use App\Http\Controllers\ProductManagement\ProductController;
 use App\Http\Controllers\UserManagement\ProfileController;
 
 /*

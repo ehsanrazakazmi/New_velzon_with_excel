@@ -6,11 +6,19 @@ use App\Models\User;
 use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Services\callback;
 use GuzzleHttp\Exception\RequestException;
 
 
 class LinkedinController extends Controller
 {
+    protected $linkedinAuthService;
+
+    public function __construct(callback $linkedinAuthService)
+    {
+        $this->linkedinAuthService = $linkedinAuthService;
+    }
+
     public function signin(Request $request)
     {
         $state = encrypt(auth()->user()->id);
@@ -37,43 +45,12 @@ class LinkedinController extends Controller
         $code = $request->code;
         $state = $request->state;
 
-        $userID = decrypt($state);
-        $user = User::find($userID);
-        if (!$user) {
-            return redirect()->back()->with('alert', 'User is not available');
-        }
-        $client = new Client([
-            'verify' => false,
-        ]);
-        try {
-            $response = $client->post('https://www.linkedin.com/oauth/v2/accessToken', [
-                'form_params' => [
-                    'grant_type' => 'authorization_code',
-                    'code' => $code,
-                    'redirect_uri' => 'http://127.0.0.1:8080/linkedin/callback',
-                    'client_id' => '77zhhm00c33ett',
-                    'client_secret' => 'ltxkzi5Pd7xxLGYO',
-                ]
-            ]);
+        $response = $this->linkedinAuthService->handleCallback($code, $state);
 
-            $responseData = json_decode($response->getBody()->getContents(), true);
-
-            if (isset($responseData['access_token'])) {
-                $accessToken = $responseData['access_token'];
-                $user->access_token = $accessToken;
-                $user->save();
-                return redirect()->route('root');
-            } else {
-                return redirect()->back()->with('error', 'There is something fishy');
-            }
-        } catch (RequestException $e) {
-            if ($e->hasResponse()) {
-                $response = $e->getResponse();
-                $statusCode = $response->getStatusCode();
-                return redirect()->back()->with('error', $statusCode);
-            } else {
-                return redirect()->back('error', $e->getMessage());
-            }
+        if (isset($response['success'])) {
+            return redirect()->route('root');
+        } else {
+            return redirect()->back()->with('error', $response['error']);
         }
     }
 

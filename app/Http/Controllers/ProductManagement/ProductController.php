@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\UserManagement;
+namespace App\Http\Controllers\ProductManagement;
 
 use App\Events\ProductCreated;
 use App\Models\Product;
