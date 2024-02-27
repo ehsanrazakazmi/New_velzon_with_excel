@@ -121,7 +121,6 @@
     <div class="footer margin-top">
         <div>Thank you</div>
         <div>&copy; NERDFLOW</div>
-        {{-- <img src="{{ $nerdflow }}" alt="Example Image" style="max-width: 100px; height: auto;"> --}}
     </div>
 </body>
 </html>

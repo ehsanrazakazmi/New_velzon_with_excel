@@ -27,49 +27,53 @@
                         to Users Index</a>
                 </div>
                 <div class="card-body">
-                    {!! Form::model($user, ['method' => 'PATCH', 'route' => ['user.update', encrypt($user->id)]]) !!}
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label for="name" class="form-label">Name:</label>
-                                {!! Form::text('name', null, ['placeholder' => 'Name', 'class' => 'form-control']) !!}
-                            </div>
+                    <form method="POST" action="{{ route('user.update', encrypt($user->id)) }}">
+                        @method('PATCH')
+                        @csrf
 
-                            <div class="mb-3">
-                                <label for="password" class="form-label">Password:</label>
-                                {!! Form::password('password', ['placeholder' => 'Password', 'class' => 'form-control']) !!}
-                            </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="name" class="form-label">Name:</label>
+                                    <input type="text" name="name" value="{{ old('name', $user->name) }}" placeholder="Name" class="form-control">
+                                </div>
 
-                            <div class="mb-3">
-                                <label for="confirm-password" class="form-label">Confirm Password:</label>
-                                {!! Form::password('confirm-password', ['placeholder' => 'Confirm Password', 'class' => 'form-control']) !!}
-                            </div>
-                        </div>
+                                <div class="mb-3">
+                                    <label for="password" class="form-label">Password:</label>
+                                    <input type="password" name="password" placeholder="Password" class="form-control">
+                                </div>
 
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label for="iconInput" class="form-label">Email:</label>
-                                <div class="form-icon">
-                                    {!! Form::text('email', null, [
-                                        'placeholder' => 'example@gmail.com',
-                                        'class' => 'form-control form-control-icon',
-                                        'id' => 'iconInput',
-                                    ]) !!}
-                                    <i class="ri-mail-unread-line"></i>
+                                <div class="mb-3">
+                                    <label for="confirm-password" class="form-label">Confirm Password:</label>
+                                    <input type="password" name="confirm-password" placeholder="Confirm Password" class="form-control">
                                 </div>
                             </div>
 
-                            <div class="mb-3">
-                                <label for="roles" class="form-label">Role:</label>
-                                {!! Form::select('roles[]', $roles, $userRole, ['class' => 'form-control']) !!}
-                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="iconInput" class="form-label">Email:</label>
+                                    <div class="form-icon">
+                                        <input type="text" name="email" value="{{ old('email', $user->email) }}" placeholder="example@gmail.com" class="form-control form-control-icon" id="iconInput">
+                                        <i class="ri-mail-unread-line"></i>
+                                    </div>
+                                </div>
 
+                                <div class="mb-3">
+                                    <label for="roles" class="form-label">Role:</label>
+                                    <select name="roles[]" class="form-control">
+                                        @foreach($roles as $roleId => $roleName)
+                                            <option value="{{ $roleId }}" {{ in_array($roleId, $userRole) ? 'selected' : '' }}>
+                                                {{ $roleName }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                    <button type="submit"
-                        class="btn rounded-pill btn-success waves-effect waves-light mt-3">Update</button>
-                    {!! Form::close() !!}
-                </div><!-- end card-body -->
+
+                        <button type="submit" class="btn rounded-pill btn-success waves-effect waves-light mt-3">Update</button>
+                    </form>
+                                    </div><!-- end card-body -->
             </div><!-- end card -->
         </div>
         <!-- end col -->

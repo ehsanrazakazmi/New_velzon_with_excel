@@ -140,7 +140,7 @@ class ProductController extends Controller
         $totalprice = $product->sum('price');
         $randomNumber = mt_rand(100000000, 999999999);
 
-        $pdf = Pdf::loadView('pdf.pdf', compact('product', 'base64', 'totalprice', 'randomNumber', 'nerdflow'));
+        $pdf = Pdf::loadView('Product-Management.pdf.pdf', compact('product', 'base64', 'totalprice', 'randomNumber', 'nerdflow'));
         return $pdf->download('webappfix.pdf');
     }
 }

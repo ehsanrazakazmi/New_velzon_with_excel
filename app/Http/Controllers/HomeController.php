@@ -36,7 +36,7 @@ class HomeController extends Controller
 
     public function root()
     {
-        return view('Design-pages/index');
+        return view('layouts/index');
     }
 
     /*Language Translation*/
