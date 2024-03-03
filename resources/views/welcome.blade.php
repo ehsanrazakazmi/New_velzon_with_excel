@@ -1,1 +1,1 @@
-Or ji kiya haal hai, asal me job execute ho raha hai is liye apko ye automatic email aa rahi hai
+apko ye automatic email aa rahi hai
