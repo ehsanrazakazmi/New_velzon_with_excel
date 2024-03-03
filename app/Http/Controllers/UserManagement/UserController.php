@@ -25,11 +25,11 @@ class UserController extends Controller
 
     public function index(Request $request)
     {
-        $data = User::orderBy('id','ASC')->paginate(5);
+        $users = User::orderBy('id','ASC')->paginate(5);
         $roles = Role::pluck('name','name')->all();         // retrieves all the values by given name key
         // $user = load('notifications');
 
-        return view('User-Management.Users.list',compact('data','roles'))->with('i', ($request->input('page', 1) - 1) * 5);
+        return view('User-Management.Users.list',compact('users','roles'))->with('i', ($request->input('page', 1) - 1) * 5);
 
     }
 
@@ -46,24 +46,18 @@ class UserController extends Controller
             return redirect()->back()->withErrors($validator)->withInput();
         }
 
-
         $input = $request->all();
         $input['password'] = Hash::make($input['password']);
-        // $request->password = Hash::make($request->password);
-
         $user = User::create($input);
         $user->assignRole($request->input('roles'));
 
         $user->notify(new WelcomeNotification);
 
-
-
         return redirect()->route('user.index')->with('success','User created successfully');
     }
     public function edit($id)
     {
-        $id = decrypt($id);
-        $user = User::find($id);
+        $user = User::find(decrypt($id));
         $roles = Role::pluck('name','name')->all();
         $userRole = $user->roles->pluck('name','name')->all();
 
@@ -72,7 +66,6 @@ class UserController extends Controller
 
     public function update(Request $request, $id)
     {
-        $id = decrypt($id);
         $validator = Validator::make($request->all(), [
             'name' => 'required',
             'email' => 'required|email|unique:users,email,'.$id,
@@ -92,7 +85,7 @@ class UserController extends Controller
             $input = Arr::except($input,array('password'));
         }
 
-        $user = User::find($id);
+        $user = User::find(decrypt($id));
         $user->update($input);
         DB::table('model_has_roles')->where('model_id',$id)->delete();
 
@@ -103,8 +96,7 @@ class UserController extends Controller
 
     public function destroy($id)
     {
-        $id = decrypt($id);
-        User::find($id)->delete();
+        User::find(decrypt($id))->delete();
         return redirect()->route('user.index')->with('success','User deleted successfully');
     }
 

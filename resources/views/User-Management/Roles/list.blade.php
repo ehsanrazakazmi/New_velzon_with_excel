@@ -44,7 +44,7 @@
 
                 {{-- This data-table starts here... --}}
                 <div class="card-body">
-                    @can('Role list')   
+                    @can('Role list')
                         <table id="scroll-horizontal" class="table nowrap align-middle" style="width:100%">
                             <thead>
                                 <tr>
@@ -62,7 +62,7 @@
                                         <td class="text-center" data-search="{{$role->name}}">{{$role->name}}</td>
                                         <td class="text-center" data-search="{{$role->description}}">{{$role->description}}</td>
                                         <td class="text-center">
-                                            
+
                                             <button data-bs-toggle="modal" data-bs-target="#myModal{{$key}}" class="btn btn-link">
                                                 <i class="ri-eye-line"></i>
                                             </button>
@@ -97,7 +97,7 @@
                                                             <button class="btn btn-sm btn-success"><a href="{{ route('role.edit', encrypt($role->id)) }}" class="text-white"><i class="ri-edit-line"></i></a></button>
                                                         </div>
                                                     @endcan
-                                                    @can('Role delete') 
+                                                    @can('Role delete')
                                                         <div class="remove">
                                                             <button class="btn btn-sm btn-danger remove-item-btn" data-bs-toggle="modal" data-bs-target="#deleteRecordModal{{$key}}"><i class="ri-delete-bin-5-line"></i></button>
                                                         </div>
@@ -147,7 +147,7 @@
                             </tbody>
                         </table>
                     @endcan
-                    
+
                 </div><!-- end card-body -->
 
             </div>
@@ -166,7 +166,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
                         id="close-modal"></button>
                 </div>
-               
+
                 <form method="POST" action="{{ route('role.store') }}">
                     @csrf
                     <div class="modal-body">
@@ -194,13 +194,13 @@
                             @endcan
                         </div>
                     </div>
-                </form>   
+                </form>
             </div>
         </div>
     </div>
 
 @endsection
-    
+
 @section('script')
     <!--jquery cdn-->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>

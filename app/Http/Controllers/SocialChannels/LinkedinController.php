@@ -6,7 +6,7 @@ use App\Models\User;
 use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Services\callback;
+use App\Services\linkedin;
 use GuzzleHttp\Exception\RequestException;
 
 
@@ -14,7 +14,7 @@ class LinkedinController extends Controller
 {
     protected $linkedinAuthService;
 
-    public function __construct(callback $linkedinAuthService)
+    public function __construct(linkedin $linkedinAuthService)
     {
         $this->linkedinAuthService = $linkedinAuthService;
     }

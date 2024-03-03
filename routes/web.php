@@ -93,22 +93,22 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('/products/{product}/pay', [CheckoutController::class, 'makePayment'])->name('products.pay');
 
 
-    //----------------------------------- Stripe comments, will be used if needed--------------------------------
+    /*----------------------------------- Stripe comments, will be used if needed--------------------------------
 
-    // Route::get('/checkout/{product}', [CheckoutController::class, 'checkout'])->name('checkout');
-    // Route::post('/checkout/{product}', [CheckoutController::class, 'charge'])->name('checkout.charge');
+     Route::get('/checkout/{product}', [CheckoutController::class, 'checkout'])->name('checkout');
+     Route::post('/checkout/{product}', [CheckoutController::class, 'charge'])->name('checkout.charge');
 
-    // Route::get('export-user', [UserController::class, 'exportUser'])->name('export-user');
-    // Route::post('import-user', [UserController::class, 'importUser'])->name('import-user');
+     Route::get('export-user', [UserController::class, 'exportUser'])->name('export-user');
+     Route::post('import-user', [UserController::class, 'importUser'])->name('import-user');
 
-    // Route::controller(PlanController::class)->group(function(){
-    //     Route::get('/plans','index')->name('main-plans');
-    //     Route::get('/plans/{plan}', 'show')->name("plans.show");
-    //     Route::post('/subscription', 'subscription')->name("subscription.create");
+     Route::controller(PlanController::class)->group(function(){
+         Route::get('/plans','index')->name('main-plans');
+         Route::get('/plans/{plan}', 'show')->name("plans.show");
+         Route::post('/subscription', 'subscription')->name("subscription.create");
 
-    // });
+     });
 
-    // -----------------------------------------------------------------------------------------------------------
+     -----------------------------------------------------------------------------------------------------------*/
 
     Route::controller(SubscriptionController::class)->group(function () {
         Route::middleware([SubscribedToPlan::class])->group(function () {

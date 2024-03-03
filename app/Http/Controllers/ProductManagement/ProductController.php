@@ -64,14 +64,12 @@ class ProductController extends Controller
 
     public function edit($id)
     {
-        $id = decrypt($id);   // decrypts the id after encryption in the blade file
-        $product = Product::find($id);  // feed the product variable into the blade file
+        $product = Product::find(decrypt($id));  // feed the product variable into the blade file
         return view('Product-Management.Products.edit', compact('product'));
     }
 
     public function update(Request $request, $id)
     {
-        $id = decrypt($id);
         $validator = Validator::make($request->all(), [
             'name' => 'required',
             'detail' => 'required',
@@ -85,7 +83,7 @@ class ProductController extends Controller
             return redirect()->back()->withErrors($validator)->withInput();
         }
 
-        Product::find($id)->update(
+        Product::find(decrypt($id))->update(
             [
                 'name' => $request->name,
                 'detail' => $request->detail,
@@ -102,8 +100,7 @@ class ProductController extends Controller
 
     public function destroy($id)
     {
-        $id = decrypt($id);
-        Product::find($id)->delete();   // delete the several id through the method
+        Product::find(decrypt($id))->delete();   // delete the several id through the method
         return redirect()->route('product.index')
             ->with('success', 'Product deleted successfully');
     }
@@ -121,7 +118,7 @@ class ProductController extends Controller
 
     public function downloadpdf()
     {
-        //add comments
+        //gets image path to be stored
         $avatarUrl = public_path('/assets/images/shopify-logo.png');
         $arrContextOptions = array(
             "ssl" => array(
@@ -129,13 +126,15 @@ class ProductController extends Controller
                 "verify_peer_name" => false,
             ),
         );
+        // sends path to extension
         $type = pathinfo($avatarUrl, PATHINFO_EXTENSION);
         $avatarData = file_get_contents($avatarUrl, false, stream_context_create($arrContextOptions));
-        $avatarBase64Data = base64_encode($avatarData);
+        $avatarBase64Data = base64_encode($avatarData); //encodes the data
         $base64 = 'data:image/' . $type . ';base64,' . $avatarBase64Data;
 
-        $nerdflow = public_path('images/nerdflow.jfif');
+        $nerdflow = public_path('images/nerdflow.jfif');    //sets the image to variable
 
+        // here it is used to set random number in invoice
         $product = Product::all();
         $totalprice = $product->sum('price');
         $randomNumber = mt_rand(100000000, 999999999);

@@ -30,18 +30,18 @@
                 <div class="card-body">
                     <div id="customerList">
                         <div class="row g-4 mb-3">
-                            <form method="POST" action="{{ route('role.update', encrypt($role->id)) }}">
+                            <form method="POST" action="{{ route('role.update', encrypt($roles->id)) }}">
                                 @method('PATCH')
                                 @csrf
 
                                 <div class="mb-3">
                                     <label for="basicInput" class="form-label">Name: </label>
-                                    <input type="text" name="name" value="{{ old('name', $role->name) }}" placeholder="Name" class="form-control" required>
+                                    <input type="text" name="name" value="{{ old('name', $roles->name) }}" placeholder="Name" class="form-control" required>
                                 </div>
 
                                 <div class="mb-3">
                                     <label for="description" class="form-label">Description</label>
-                                    <textarea name="description" placeholder="Description" class="form-control" rows="2" required>{{ old('description', $role->description) }}</textarea>
+                                    <textarea name="description" placeholder="Description" class="form-control" rows="2" required>{{ old('description', $roles->description) }}</textarea>
                                 </div>
 
                                 <div class="mb-3">
@@ -49,7 +49,7 @@
                                     <br>
                                     <select name="permission[]" class="js-example-basic-multiple" multiple required>
                                         @foreach($permission as $perm)
-                                            <option value="{{ $perm->name }}" {{ in_array($perm->name, $role->permissions->pluck('name')->toArray()) ? 'selected' : '' }}>
+                                            <option value="{{ $perm->name }}" {{ in_array($perm->name, $roles->permissions->pluck('name')->toArray()) ? 'selected' : '' }}>
                                                 {{ $perm->name }}
                                             </option>
                                         @endforeach

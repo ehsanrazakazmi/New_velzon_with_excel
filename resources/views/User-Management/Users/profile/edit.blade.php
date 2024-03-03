@@ -30,9 +30,6 @@
                             <div class="avatar-xs p-0 rounded-circle profile-photo-edit">
                                 <input id="profile_photo_path" name="profile_photo_path" type="file" class="profile-img-file-input">
                                 <label for="profile-img-file-input" class="profile-photo-edit avatar-xs">
-                                    {{-- <span class="avatar-title rounded-circle bg-light text-body">
-                                        <i class="ri-camera-fill"></i>
-                                    </span> --}}
                                 </label>
                             </div>
                         </div>

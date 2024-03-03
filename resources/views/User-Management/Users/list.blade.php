@@ -16,7 +16,7 @@
             Users
         @endslot
         @slot('title')
-            List 
+            List
         @endslot
     @endcomponent
 
@@ -26,12 +26,12 @@
     <div class="row">
         <div class="col-lg-12">
             <div class="card">
-                
+
                 <div class="card-header d-flex justify-content-between align-items-center">
                     <h4 class="card-title mb-0"><strong>Users</strong></h4>
                     <div class="col-sm-auto">
                         <div>
-                            @can('User create')                        
+                            @can('User create')
                                 <button type="button" class="btn btn-success add-btn" data-bs-toggle="modal"
                                 id="create-btn" data-bs-target="#showModal">
                                     <i class="ri-add-line align-bottom me-1"></i> Add
@@ -54,25 +54,25 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($data as $key => $user)
+                                @foreach ($users as $key => $user)
                                 <tr>
                                     <td class="text-center">{{ ++$i }}</td>
                                     <td class="text-center">{{ $user->name }}</td>
                                     <td class="text-center">{{ $user->email }}</td>
-                                    <td class="text-center"> 
+                                    <td class="text-center">
                                         @if(isset($user->roles) && count($user->roles) > 0)
                                             {{ $user->roles[0]->name }}
                                         @endif
                                     </td>
                                     <td>
-                                        
+
                                         <div class="d-flex gap-2 justify-content-center">
                                             @can('User edit')
                                             <div class="edit">
                                                 <button class="btn btn-sm btn-success edit-item-btn"><a href="{{ route('user.edit', encrypt( $user->id)) }}" class="text-white"><i class="ri-edit-line"></i></a></button>
                                             </div>
                                             @endcan
-                                            @can('User delete') 
+                                            @can('User delete')
                                             <div class="remove">
                                                 <button class="btn btn-sm btn-danger remove-item-btn" data-bs-toggle="modal"
                                                 data-bs-target="#deleteRecordModal{{ $user->id }}"><i
@@ -105,18 +105,21 @@
                                                         <div class="d-flex gap-2 justify-content-center mt-4 mb-2">
                                                             <button type="button" class="btn w-sm btn-light"
                                                             data-bs-dismiss="modal">Close</button>
-                                                            
-                                                            
-                                                            {!! Form::open(['method' => 'DELETE','route' => ['user.destroy', encrypt($user->id)],'style'=>'display:inline']) !!}
-                                                            {!! Form::submit('Delete it!', ['class' => 'btn w-sm btn-danger', 'id' => 'delete-record']) !!}
-                                                            {!! Form::close() !!}
+
+
+                                                            <form method="POST" action="{{ route('user.destroy', encrypt($user->id)) }}" style="display:inline">
+                                                                @csrf
+                                                                @method('DELETE')
+                                                                <button type="submit" class="btn w-sm btn-danger" id="delete-record">Delete it!</button>
+                                                            </form>
+
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                       
-                                            {{-- Modal End --}} 
+
+                                            {{-- Modal End --}}
                                     </td>
                                 </tr>
                                 @endforeach
@@ -137,7 +140,7 @@
                     <h5 class="modal-title" id="exampleModalLabel">Add Role Here...</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-modal"></button>
                 </div>
-        
+
                 {!! Form::open(array('route' => 'user.store','method'=>'POST')) !!}
                 <div class="modal-body mx-4 my-2"> <!-- Adjust margin as needed -->
                     <div class="mb-3">

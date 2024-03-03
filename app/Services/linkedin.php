@@ -7,7 +7,7 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
 
 
-class callback
+class linkedin
 {
     public function handleCallback($code, $state)
     {

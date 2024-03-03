@@ -25,7 +25,9 @@ class RoleController extends Controller
         // gets the roles and permission throught the model
         $roles = Role::all();
         $permission = Permission::get();
-        // dispatch(new CustomJob())->delay(now()->setSeconds(5));      // this is a jon that will execute in 5 seconds and send email then
+        // this is a job that will execute in 5 seconds and send email then
+
+        // dispatch(new CustomJob())->delay(now()->setSeconds(5));
         // can also be written as:
         // CustomJob::dispatch()->delay(now()->setSeconds(5));
 
@@ -57,8 +59,7 @@ class RoleController extends Controller
 
     public function edit($id)
     {
-        $id = decrypt($id);
-        $role = Role::find($id);
+        $roles = Role::find(decrypt($id));
         $permission = Permission::get();
 
         // bellow will get the permissions through migrations
@@ -66,12 +67,11 @@ class RoleController extends Controller
             ->pluck('role_has_permissions.permission_id','role_has_permissions.permission_id')
             ->all();
 
-        return view('User-Management.Roles.edit',compact('role','permission','rolePermissions'));
+        return view('User-Management.Roles.edit',compact('roles','permission','rolePermissions'));
     }
 
     public function update(Request $request, $id)
     {
-        $id = decrypt($id);
         $validator = Validator::make($request->all(), [
             'name' => 'required',
             'description' => 'nullable|string',
@@ -83,9 +83,9 @@ class RoleController extends Controller
         }
 
 
-        $role = Role::find($id);
-        $role->name = $request->input('name');
-        $role->description = $request->input('description');
+        $role = Role::find(decrypt($id));
+        $role->name = $request->name;
+        $role->description = $request->description;
         $role->save();
 
         $role->syncPermissions($request->input('permission'));
@@ -95,8 +95,7 @@ class RoleController extends Controller
 
     public function destroy($id)
     {
-        $id = decrypt($id);
-        DB::table("roles")->where('id',$id)->delete();
+        DB::table("roles")->where('id',decrypt($id))->delete();
         return redirect()->route('index.page')->with('success','Role deleted successfully');
     }
 }
