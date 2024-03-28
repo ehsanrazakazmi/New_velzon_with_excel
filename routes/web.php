@@ -51,7 +51,7 @@ Route::group(['middleware' => ['auth']], function () {
             Route::post('/store', 'store')->name('role.store')->middleware('can:Role create');
             Route::get('/edit/{id}', 'edit')->name('role.edit')->middleware('can:Role edit');
             Route::patch('/update/{id}', 'update')->name('role.update')->middleware('can:Role edit');
-            Route::delete('/delete/{id}', 'destroy')->name('role.distroy')->middleware('can:Role delete');
+            Route::get('/delete/{id}', 'destroy')->name('role.distroy')->middleware('can:Role delete');
         });
     });
 
@@ -62,7 +62,7 @@ Route::group(['middleware' => ['auth']], function () {
             Route::post('/store', 'store')->name('user.store')->middleware('can:User create');
             Route::get('/edit/{id}', 'edit')->name('user.edit')->middleware('can:User edit');
             Route::patch('/update/{id}', 'update')->name('user.update')->middleware('can:User edit');
-            Route::delete('/delete/{id}', 'destroy')->name('user.destroy')->middleware('can:User delete');
+            Route::get('/delete/{id}', 'destroy')->name('user.destroy')->middleware('can:User delete');
             Route::get('excel', function () {
                 return view('excel');
             })->middleware('can:User list');
@@ -80,7 +80,7 @@ Route::group(['middleware' => ['auth']], function () {
             // Route::post('/store', 'store')->name('product.store')->middleware('can:Product create', 'productrestrict');
             Route::get('/edit/{id}', 'edit')->name('product.edit')->middleware('can:Product edit');
             Route::patch('/update/{id}', 'update')->name('product.update')->middleware('can:Product edit');
-            Route::delete('/delete/{id}', 'destroy')->name('product.destroy')->middleware('can:Product delete');
+            Route::get('/delete/{id}', 'destroy')->name('product.destroy')->middleware('can:Product delete');
             Route::get('excel', function () {
                 return view('Product-Management.Products.excel');
             })->name('show-product-excel')->middleware('can:Product list');

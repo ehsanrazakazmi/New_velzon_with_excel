@@ -23,13 +23,13 @@ class ProfileController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'name' => ['required', 'max:50'],
-            'email' => ['required', 'email', 'max:50', Rule::unique('users')->ignore(Auth::user()->id)],
-            'profile_photo_path' => ['nullable', 'image', 'max:2048'], // add validation rules for profile_image
+            'name' => 'required',
+            'email' => 'required|email',
+            'profile_photo_path' => 'nullable|image|max:2048',
         ]);
 
         if ($validator->fails()) {
-            return redirect()->back()->withErrors($validator)->withInput();
+            return redirect()->back()->with('warning', 'Validation issue arrived');
         }
 
         $attributes = $validator->validated();
@@ -40,12 +40,12 @@ class ProfileController extends Controller
         }
 
 
-        User::where('id',Auth::user()->id)->update([
+        User::where('id', Auth::user()->id)->update([
 
             'name'    => $attributes['name'],
             'email' => $attributes['email'],
             'profile_photo_path' => $path ?? Auth::user()->profile_photo_path,
         ]);
-        return redirect('profile/view')->with('success','Profile has been updated ');
+        return redirect('profile/view')->with('success', 'Profile has been updated ');
     }
 }

@@ -32,8 +32,8 @@
                     <div class="col-sm-auto">
                         <div>
                             @can('User create')
-                                <button type="button" class="btn btn-success add-btn" data-bs-toggle="modal"
-                                id="create-btn" data-bs-target="#showModal">
+                                <button type="button" class="btn btn-success add-btn" data-bs-toggle="modal" id="create-btn"
+                                    data-bs-target="#showModal">
                                     <i class="ri-add-line align-bottom me-1"></i> Add
                                 </button>
                             @endcan
@@ -55,73 +55,67 @@
                             </thead>
                             <tbody>
                                 @foreach ($users as $key => $user)
-                                <tr>
-                                    <td class="text-center">{{ ++$i }}</td>
-                                    <td class="text-center">{{ $user->name }}</td>
-                                    <td class="text-center">{{ $user->email }}</td>
-                                    <td class="text-center">
-                                        @if(isset($user->roles) && count($user->roles) > 0)
-                                            {{ $user->roles[0]->name }}
-                                        @endif
-                                    </td>
-                                    <td>
+                                    <tr>
+                                        <td class="text-center">{{ ++$i }}</td>
+                                        <td class="text-center">{{ $user->name }}</td>
+                                        <td class="text-center">{{ $user->email }}</td>
+                                        <td class="text-center">
+                                            @if (isset($user->roles) && count($user->roles) > 0)
+                                                {{ $user->roles[0]->name }}
+                                            @endif
+                                        </td>
+                                        <td>
 
-                                        <div class="d-flex gap-2 justify-content-center">
-                                            @can('User edit')
-                                            <div class="edit">
-                                                <button class="btn btn-sm btn-success edit-item-btn"><a href="{{ route('user.edit', encrypt( $user->id)) }}" class="text-white"><i class="ri-edit-line"></i></a></button>
-                                            </div>
-                                            @endcan
-                                            @can('User delete')
-                                            <div class="remove">
-                                                <button class="btn btn-sm btn-danger remove-item-btn" data-bs-toggle="modal"
-                                                data-bs-target="#deleteRecordModal{{ $user->id }}"><i
-                                                class="ri-delete-bin-5-line"></i></button>
-                                            </div>
-                                            @endcan
-                                        </div>
-                                        {{-- Modal Start   --}}
-                                        <div class="modal fade zoomIn" id="deleteRecordModal{{ $user->id }}"tabindex="-1" aria-hidden="true">
-                                            <div class="modal-dialog modal-dialog-centered">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                        aria-label="Close" id="btn-close"></button>
+                                            <div class="d-flex gap-2 justify-content-center">
+                                                @can('User edit')
+                                                    <div class="edit">
+                                                        <button class="btn btn-sm btn-success edit-item-btn"><a
+                                                                href="{{ route('user.edit', encrypt($user->id)) }}"
+                                                                class="text-white"><i class="ri-edit-line"></i></a></button>
                                                     </div>
-                                                    <div class="modal-body">
-                                                        <div class="mt-2 text-center">
-                                                            <script src="https://cdn.lordicon.com/lordicon-1.4.1.js"></script>
-                                                            <lord-icon
-                                                            src="https://cdn.lordicon.com/wpyrrmcq.json"
-                                                            trigger="hover"
-                                                            style="width:250px;height:250px">
-                                                        </lord-icon>
-                                                        <div class="mt-4 pt-2 fs-15 mx-4 mx-sm-5">
-                                                            <h4>Are you Sure ?</h4>
-                                                            <p class="text-muted mx-4 mb-0">Are you Sure You want to
-                                                                Remove this Record ?</p>
-                                                            </div>
+                                                @endcan
+                                                @can('User delete')
+                                                    <div class="remove">
+                                                        <button class="btn btn-sm btn-danger remove-item-btn" data-bs-toggle="modal"
+                                                            data-bs-target="#deleteRecordModal{{ $user->id }}"><i
+                                                                class="ri-delete-bin-5-line"></i></button>
+                                                    </div>
+                                                @endcan
+                                            </div>
+                                            {{-- Modal Start   --}}
+                                            <div class="modal fade zoomIn"
+                                                id="deleteRecordModal{{ $user->id }}"tabindex="-1" aria-hidden="true">
+                                                <div class="modal-dialog modal-dialog-centered">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                                aria-label="Close" id="btn-close"></button>
                                                         </div>
-                                                        <div class="d-flex gap-2 justify-content-center mt-4 mb-2">
-                                                            <button type="button" class="btn w-sm btn-light"
-                                                            data-bs-dismiss="modal">Close</button>
-
-
-                                                            <form method="POST" action="{{ route('user.destroy', encrypt($user->id)) }}" style="display:inline">
-                                                                @csrf
-                                                                @method('DELETE')
-                                                                <button type="submit" class="btn w-sm btn-danger" id="delete-record">Delete it!</button>
-                                                            </form>
-
+                                                        <div class="modal-body">
+                                                            <div class="mt-2 text-center">
+                                                                <script src="https://cdn.lordicon.com/lordicon-1.4.1.js"></script>
+                                                                <lord-icon src="https://cdn.lordicon.com/wpyrrmcq.json"
+                                                                    trigger="hover" style="width:250px;height:250px">
+                                                                </lord-icon>
+                                                                <div class="mt-4 pt-2 fs-15 mx-4 mx-sm-5">
+                                                                    <h4>Are you Sure ?</h4>
+                                                                    <p class="text-muted mx-4 mb-0">Are you Sure You want to
+                                                                        Remove this Record ?</p>
+                                                                </div>
+                                                            </div>
+                                                            <div class="d-flex gap-2 justify-content-center mt-4 mb-2">
+                                                                <button type="button" class="btn w-sm btn-light"
+                                                                    data-bs-dismiss="modal">Close</button>
+                                                                <a href="{{ url('/user/delete/'.encrypt($user->id)) }}" class="btn w-sm btn-danger" >Delete it!</a>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
 
                                             {{-- Modal End --}}
-                                    </td>
-                                </tr>
+                                        </td>
+                                    </tr>
                                 @endforeach
                             </tbody>
                         </table>
@@ -138,43 +132,53 @@
             <div class="modal-content">
                 <div class="modal-header bg-light p-3">
                     <h5 class="modal-title" id="exampleModalLabel">Add Role Here...</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-modal"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+                        id="close-modal"></button>
                 </div>
 
-                {!! Form::open(array('route' => 'user.store','method'=>'POST')) !!}
-                <div class="modal-body mx-4 my-2"> <!-- Adjust margin as needed -->
-                    <div class="mb-3">
-                        <label for="name" class="form-label">Name</label>
-                        {!! Form::text('name', null, array('placeholder' => 'Name','class' => 'form-control')) !!}
+                <form action="{{ route('user.store') }}" method="POST">
+                    @csrf
+                    <div class="modal-body mx-4 my-2">
+                        <!-- Adjust margin as needed -->
+                        <div class="mb-3">
+                            <label for="name" class="form-label">Name</label>
+                            <input type="text" name="name" placeholder="Name" class="form-control">
+                        </div>
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email</label>
+                            <div class="form-icon">
+                                <input type="text" name="email" placeholder="example@gmail.com"
+                                    class="form-control form-control-icon" id="iconInput">
+                                <i class="ri-mail-unread-line"></i>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="password" class="form-label">Password</label>
+                            <input type="password" name="password" placeholder="Password" class="form-control">
+                        </div>
+                        <div class="mb-3">
+                            <label for="confirm-password" class="form-label">Confirm Password</label>
+                            <input type="password" name="confirm-password" placeholder="Confirm Password"
+                                class="form-control">
+                        </div>
+                        <div class="mb-3">
+                            <strong>Role:</strong>
+                            <select name="roles[]" class="form-control">
+                                @foreach($roles as $roleId => $roleName)
+                                    <option value="{{ $roleId }}">{{ $roleName }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+
                     </div>
-                    <div class="mb-3">
-                        <label for="email" class="form-label">email</label>
-                        <div class="form-icon">
-                            {!! Form::text('email', null, array('placeholder' => 'example@gmail.com','class' => 'form-control form-control-icon', 'id'=>'iconInput')) !!}
-                            <i class="ri-mail-unread-line"></i>
+                    <div class="modal-footer">
+                        <div class="hstack gap-2 justify-content-end">
+                            @can('User create')
+                                <button type="submit" class="btn btn-success" id="add-btn">Add User</button>
+                            @endcan
                         </div>
                     </div>
-                    <div class="mb-3">
-                        <label for="password" class="form-label">password</label>
-                        {!! Form::password('password', array('placeholder' => 'Password','class' => 'form-control')) !!}
-                    </div>
-                    <div class="mb-3">
-                        <label for="password" class="form-label">Confirm-password</label>
-                        {!! Form::password('confirm-password', array('placeholder' => 'Confirm Password','class' => 'form-control')) !!}
-                    </div>
-                    <div class="mb-3">
-                        <strong>Role:</strong>
-                        {!! Form::select('roles[]', $roles,[], array('class' => 'form-control')) !!}
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <div class="hstack gap-2 justify-content-end">
-                        @can('User create')
-                            <button type="submit" class="btn btn-success" id="add-btn">Add User</button>
-                        @endcan
-                    </div>
-                </div>
-                {!! Form::close() !!}
+                </form>
             </div>
         </div>
     </div>

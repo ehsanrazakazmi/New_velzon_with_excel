@@ -128,12 +128,7 @@
 
                                                             <div class="d-flex gap-2 justify-content-center mt-4 mb-2">
                                                                 <button type="button" class="btn w-sm btn-light" data-bs-dismiss="modal">Close</button>
-
-                                                                <form method="post" action="{{ route('role.distroy', ['id' => encrypt($role->id)]) }}" method="POST">
-                                                                    @method('DELETE')
-                                                                    @csrf
-                                                                    <button type="submit" class="btn w-sm btn-danger" id="delete-record">Yes, Delete It!</button>
-                                                                </form>
+                                                                <a href="{{ url('/roles/delete/'.encrypt($role->id)) }}" class="btn w-sm btn-danger">Delete it!</a>
                                                                 </div>
                                                             </div>
                                                         </div>

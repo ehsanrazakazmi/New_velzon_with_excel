@@ -43,7 +43,7 @@ class UserController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return redirect()->back()->withErrors($validator)->withInput();
+            return redirect()->back()->with('warning', 'Validation issue arrived');
         }
 
         $input = $request->all();
@@ -74,7 +74,7 @@ class UserController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return redirect()->back()->withErrors($validator)->withInput();
+            return redirect()->back()->with('warning', 'Validation issue arrived');
         }
 
         $input = $request->all();

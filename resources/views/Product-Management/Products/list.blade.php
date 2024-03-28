@@ -38,20 +38,22 @@
                                     <i class="ri-add-line align-bottom me-1"></i> Add
                                 </button>
 
-                                <div class="ml-3">
-                                    <button type="button" class="btn btn-success add-btn" style="margin-right: 10px;">
-                                        <a href="{{ route('show-product-excel') }}" style="color: white">Generate Excel</a>
-                                    </button>
-                                </div>
+                                <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                    data-bs-target="#myModal" style="margin-right: 10px;">Import Excel</button>
 
-                                <div class="ml-3">
-                                    <button type="button" class="btn btn-success add-btn" style="margin-right: 10px;">
-                                        <a href="{{ route('generate-pdf') }}" style="color: white">Generate PDF</a>
-                                    </button>
-                                </div>
+                                <button type="button" class="btn btn-success add-btn" style="margin-right: 10px;">
+                                    <a href="{{route('export-product')}}" style="color: white">Generate Excel</a>
+                                </button>
+
+                                <button type="button" class="btn btn-danger btn-label waves-effect waves-light"
+                                    style="margin-right: 10px;">
+                                    <i class="ri-file-download-line  label-icon align-middle fs-16 me-2">
+                                    </i><a href="{{ route('generate-pdf') }}" style="color: white">Generate PDF</a>
+                                </button>
                             @endcan
                         </div>
                     </div>
+
                 </div>
 
 
@@ -97,7 +99,7 @@
                                         @endif
                                     </td>
                                     <td>
-                                        <div class="d-flex gap-2 justify-content-end">
+                                        <div class="d-flex gap-2 justify-content-center">
                                             <div class="edit">
                                                 @can('Product edit')
                                                     <button class="btn btn-sm btn-success edit-item-btn"><a
@@ -130,13 +132,16 @@
 
                                                     </div>
                                                     <div class="modal-footer">
-                                                        <button type="button" class="btn btn-ghost-dark waves-effect waves-light"
+                                                        <button type="button"
+                                                            class="btn btn-ghost-dark waves-effect waves-light"
                                                             data-bs-dismiss="modal">Close</button>
                                                         @if (!$product->paid)
+                                                            {{-- dont use form here, just use <a> tag --}}
                                                             <form method="post"
                                                                 action="{{ route('products.pay', ['product' => $product->id]) }}">
                                                                 @csrf
-                                                                <button type="submit" class="btn btn-ghost-success waves-effect waves-light">Confirm</button>
+                                                                <button type="submit"
+                                                                    class="btn btn-ghost-success waves-effect waves-light">Confirm</button>
                                                             </form>
                                                         @endif
                                                     </div>
@@ -169,14 +174,7 @@
                                                         <div class="d-flex gap-2 justify-content-center mt-4 mb-2">
                                                             <button type="button" class="btn w-sm btn-light"
                                                                 data-bs-dismiss="modal">Close</button>
-                                                            <form
-                                                                action="{{ route('product.destroy', encrypt($product->id)) }}"
-                                                                method="POST">
-                                                                @csrf
-                                                                @method('DELETE')
-                                                                <button type="submit" class="btn w-sm btn-danger">Delete
-                                                                    it!</button>
-                                                            </form>
+                                                            <a href="{{ url('/product/delete/'.encrypt($product->id)) }}" class="btn w-sm btn-danger">Delete it!</a>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -262,6 +260,33 @@
             </div>
         </div>
     </div>
+
+    <!--Modal for import excel -->
+
+    <div id="myModal" class="modal fade" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true"
+        style="display: none;">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="myModalLabel">Import Excel File</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form class="form" method="POST" enctype="multipart/form-data"
+                    action="{{ route('import-product') }}">
+                    <div class="modal-body">
+                        @csrf
+                        <label for="formFile" class="form-label">Products data:</label>
+                        <input class="form-control" type="file" name="file" id="formFile">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary ">Import</button>
+                    </div>
+                </form>
+
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
 @endsection
 
 @section('script')

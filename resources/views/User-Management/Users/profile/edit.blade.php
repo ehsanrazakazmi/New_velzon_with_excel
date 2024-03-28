@@ -4,12 +4,14 @@
 @endsection
 @section('content')
     <div class="position-relative mx-n4 mt-n4">
+        @include('partials.session')
         <div class="profile-wid-bg profile-setting-img">
             <img src="{{ URL::asset('assets/images/profile-bg.jpg') }}" class="profile-wid-img" alt="">
             <div class="overlay-content">
                 <div class="text-end p-3">
                     <div class="p-0 ms-auto rounded-circle profile-photo-edit">
-                        <input id="profile-foreground-img-file-input" type="file" class="profile-foreground-img-file-input">
+                        <input id="profile-foreground-img-file-input" type="file"
+                            class="profile-foreground-img-file-input">
                         <label for="profile-foreground-img-file-input" class="profile-photo-edit btn btn-light">
                             <i class="ri-image-edit-line align-bottom me-1"></i> Change Cover
                         </label>
@@ -25,15 +27,16 @@
                 <div class="card-body p-4">
                     <div class="text-center">
                         <div class="profile-user position-relative d-inline-block mx-auto  mb-4">
-                            <img src="{{ asset('storage/'.Auth::user()->profile_photo_path) }}"
+                            <img src="{{ asset('storage/' . Auth::user()->profile_photo_path) }}"
                                 class="rounded-circle avatar-xl img-thumbnail user-profile-image" alt="user-profile-image">
                             <div class="avatar-xs p-0 rounded-circle profile-photo-edit">
-                                <input id="profile_photo_path" name="profile_photo_path" type="file" class="profile-img-file-input">
+                                <input id="profile_photo_path" name="profile_photo_path" type="file"
+                                    class="profile-img-file-input">
                                 <label for="profile-img-file-input" class="profile-photo-edit avatar-xs">
                                 </label>
                             </div>
                         </div>
-                        <h5 class="fs-17 mb-1">{{auth()->user()->name}}</h5>
+                        <h5 class="fs-17 mb-1">{{ auth()->user()->name }}</h5>
                         <p class="text-muted mb-0">Lead Designer / Developer</p>
                     </div>
                 </div>
@@ -57,14 +60,14 @@
                 <div class="card-body p-4">
                     <div class="tab-content">
                         <div class="tab-pane active" id="personalDetails" role="tabpanel">
-                            <form action="{{route('store.profile')}}" method="post" enctype="multipart/form-data">
+                            <form action="{{ route('store.profile') }}" method="post" enctype="multipart/form-data">
                                 @csrf
                                 <div class="row">
                                     <div class="col-lg-6">
                                         <div class="mb-3">
                                             <label for="name" class="form-label">Name</label>
                                             <input type="text" class="form-control" id="name" name="name"
-                                                placeholder="Enter your firstname" value="Dave">
+                                                placeholder="Enter your firstname" value="{{auth()->user()->name}}">
                                         </div>
                                     </div>
                                     <!--end col-->
@@ -75,7 +78,7 @@
                                             <label for="email" class="form-label">Email
                                                 Address</label>
                                             <input type="email" class="form-control" id="email" name="email"
-                                                placeholder="Enter your email" value="daveadame@velzon.com">
+                                                placeholder="Enter your email" value="{{auth()->user()->email}}">
                                         </div>
                                     </div>
                                     <!--end col-->
@@ -83,15 +86,16 @@
                                     <div class="col-lg-6">
                                         <div class="mb-3">
                                             <label for="image" class="form-label">Upload Picture</label>
-                                            <input type="file" class="form-control" id="image" name="profile_photo_path"
-                                                placeholder="Enter your email" value="daveadame@velzon.com">
+                                            <input type="file" class="form-control" id="image"
+                                                name="profile_photo_path" placeholder="Enter your email"
+                                                value="{{auth()->user()->profile_photo_path}}">
                                         </div>
                                     </div>
                                     <!--end col-->
                                     <!--end col-->
                                     <div class="col-lg-12">
                                         <div class="hstack gap-2 justify-content-end">
-                                            <button type="submit" class="btn btn-primary">Updates</button>
+                                            <button type="submit" class="btn btn-primary">Update</button>
                                         </div>
                                     </div>
                                     <!--end col-->

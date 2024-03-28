@@ -42,7 +42,7 @@ class ProductController extends Controller
 
         // prints the follwing statement if validation fails
         if ($validator->fails()) {
-            return redirect()->back()->with('warning', 'Cannot add duplicate product');
+            return redirect()->back()->with('warning', 'Validation error'); //theek karo
         }
 
         // it will store the validated data into the database
@@ -50,7 +50,7 @@ class ProductController extends Controller
 
         //except token
         Product::create($request->all());
-
+// comment it
         $data = ['name' => $request->name, 'detail' => $request->detail, 'price' => $request->price,  'creator' => auth()->user()->name];
 
         //event called here....
@@ -80,7 +80,7 @@ class ProductController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return redirect()->back()->withErrors($validator)->withInput();
+            return redirect()->back()->withErrors($validator)->withInput();  // session ke through
         }
 
         Product::find(decrypt($id))->update(

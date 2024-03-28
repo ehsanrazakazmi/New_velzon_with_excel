@@ -49,14 +49,17 @@ class SubscriptionController extends Controller
         $user = Auth::user();
         // Check if the user is already subscribed
         if ($user->subscribed()) {
-            return 'false';
+            // return 'false';
+            return redirect()->back()->with('error', 'You are already subscribed');
         }
 
         // $planId = $request->plan_id;
         $planId = $request->planId;
         $plan = ModelPlan::where('plan_id', $planId)->first();
         if (!$plan) {
-            return 'false';
+            // return 'false';
+            return redirect()->back()->with('error', 'You does not have any plan to subscribe');
+
         }
 
         return response()->json([

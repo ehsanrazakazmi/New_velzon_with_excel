@@ -26,11 +26,11 @@ class RoleController extends Controller
         $roles = Role::all();
         $permission = Permission::get();
         // this is a job that will execute in 5 seconds and send email then
-
-        // dispatch(new CustomJob())->delay(now()->setSeconds(5));
-        // can also be written as:
-        // CustomJob::dispatch()->delay(now()->setSeconds(5));
-
+        /*
+        dispatch(new CustomJob())->delay(now()->setSeconds(5));
+        can also be written as:
+        CustomJob::dispatch()->delay(now()->setSeconds(5));
+        */
         return view('User-Management.Roles.list', compact('roles','permission'));
     }
 
@@ -79,7 +79,7 @@ class RoleController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return redirect()->back()->withErrors($validator)->withInput();
+            return redirect()->back()->with('success','Validation errors');
         }
 
 
@@ -95,7 +95,7 @@ class RoleController extends Controller
 
     public function destroy($id)
     {
-        DB::table("roles")->where('id',decrypt($id))->delete();
+        Role::find(decrypt($id))->delete();
         return redirect()->route('index.page')->with('success','Role deleted successfully');
     }
 }
