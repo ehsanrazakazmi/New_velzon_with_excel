@@ -22,7 +22,7 @@
                 <div class="col-lg-12">
                     <div class="text-center mt-sm-5 mb-4 text-white-50">
                         <div>
-                            <a href="index" class="d-inline-block auth-logo">
+                            <a href="{{ route('root') }}" class="d-inline-block auth-logo">
                                 <img src="{{ URL::asset('assets/images/logo-light.png')}}" alt="" height="20">
                             </a>
                         </div>
@@ -41,6 +41,28 @@
                                 <h5 class="text-primary">Welcome Back !</h5>
                                 <p class="text-muted">Sign in to continue to Velzon.</p>
                             </div>
+                            @if (session('needs_activation'))
+                                <div class="alert alert-warning mt-3 mb-0" id="activation-notice" role="alert">
+                                    <p class="mb-2">This account has not been activated yet. Please use the sign-in
+                                        link in your welcome email.</p>
+                                    <form method="POST" action="{{ route('welcome.resend') }}" class="mb-0">
+                                        @csrf
+                                        <input type="hidden" name="email" value="{{ session('needs_activation') }}">
+                                        <button type="submit" id="resend-welcome"
+                                            class="btn btn-sm btn-warning">Resend welcome email</button>
+                                    </form>
+                                </div>
+                            @endif
+
+                            @if (session('warning'))
+                                <div class="alert alert-warning mt-3 mb-0" role="alert">{{ session('warning') }}</div>
+                            @endif
+                            @if (session('success'))
+                                <div class="alert alert-success mt-3 mb-0" role="alert">{{ session('success') }}</div>
+                            @endif
+                            @if (session('status'))
+                                <div class="alert alert-info mt-3 mb-0" role="alert">{{ session('status') }}</div>
+                            @endif
                             <div class="p-2 mt-4">
                                 <form action="{{ route('login') }}" method="POST">
                                     @csrf

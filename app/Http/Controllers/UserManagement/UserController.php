@@ -7,6 +7,10 @@ use Illuminate\Support\Arr;
 use App\Exports\UsersExport;
 use App\Imports\UsersImport;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
+use App\Http\Controllers\WelcomeLoginController;
 use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Role;
 use App\Http\Controllers\Controller;
@@ -52,6 +56,11 @@ class UserController extends Controller
         $user->assignRole($request->input('roles'));
 
         $user->notify(new WelcomeNotification);
+
+        if (! WelcomeLoginController::issueWelcomeLink($user)) {
+            return redirect()->route('user.index')
+                ->with('warning', 'User created, but the welcome email could not be sent. Use Resend once mail is working.');
+        }
 
         return redirect()->route('user.index')->with('success','User created successfully');
     }
@@ -108,5 +117,24 @@ class UserController extends Controller
     public function importUser(Request $request)
     {
         Excel::import(new UsersImport, $request->file('file'));
+    }
+
+    /** Re-issue a welcome email for an account that has not been activated. */
+    public function resendWelcome($id)
+    {
+        $user = User::findOrFail(decrypt($id));
+
+        if (! $user->welcome_token && ! $user->must_change_password) {
+            return redirect()->route('user.index')
+                ->with('warning', $user->name . ' has already activated their account.');
+        }
+
+        if (! WelcomeLoginController::issueWelcomeLink($user)) {
+            return redirect()->route('user.index')
+                ->with('warning', 'Could not send the welcome email. Check the mail settings.');
+        }
+
+        return redirect()->route('user.index')
+            ->with('success', 'Welcome email resent to ' . $user->email . '.');
     }
 }

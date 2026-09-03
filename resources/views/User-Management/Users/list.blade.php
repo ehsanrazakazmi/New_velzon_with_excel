@@ -74,6 +74,16 @@
                                                                 class="text-white"><i class="ri-edit-line"></i></a></button>
                                                     </div>
                                                 @endcan
+                                                @can('User edit')
+                                                    @if ($user->welcome_token)
+                                                        <div class="resend">
+                                                            <button class="btn btn-sm btn-warning resend-welcome-btn"
+                                                                title="Awaiting activation - resend welcome email"><a
+                                                                    href="{{ route('user.resendWelcome', encrypt($user->id)) }}"
+                                                                    class="text-white"><i class="ri-mail-send-line"></i></a></button>
+                                                        </div>
+                                                    @endif
+                                                @endcan
                                                 @can('User delete')
                                                     <div class="remove">
                                                         <button class="btn btn-sm btn-danger remove-item-btn" data-bs-toggle="modal"

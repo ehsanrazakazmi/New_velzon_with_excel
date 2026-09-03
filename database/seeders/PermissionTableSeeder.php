@@ -28,6 +28,10 @@ class PermissionTableSeeder extends Seeder
             ['name' => 'User create','guard_name' => 'web','created_at' => now()],
             ['name' => 'User edit','guard_name' => 'web','created_at' => now()],                
             ['name' => 'User delete','guard_name' => 'web','created_at' => now()],
+            ['name' => 'Laptop list','guard_name' => 'web','created_at' => now()],
+            ['name' => 'Laptop create','guard_name' => 'web','created_at' => now()],
+            ['name' => 'Laptop edit','guard_name' => 'web','created_at' => now()],
+            ['name' => 'Laptop delete','guard_name' => 'web','created_at' => now()],
         ]);
     }
 }

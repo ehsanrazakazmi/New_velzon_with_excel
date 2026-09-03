@@ -6,7 +6,7 @@ use Closure;
 use App\Models\Plan;
 use App\Models\Product;
 use Illuminate\Http\Request;
-use Laravel\Cashier\Subscription;
+use App\Models\Subscription;
 
 class Productrestrict
 {
@@ -23,17 +23,18 @@ class Productrestrict
         $subscription = Subscription::where('user_id', auth()->id())->where('stripe_status', 'active')->first();
 
         if (!$subscription) {
-            // Handle the case where the user doesn't have an active subscription
+            return redirect()->route('plans.all')
+                ->with('warning', 'Please subscribe to a plan before adding products.');
         }
 
         $productLimit = 0;
-        if ($subscription->plan->name == 'Basic') {
+        if ($subscription->plan?->name === 'Basic') {
             $productLimit = 3;
         }
-        elseif ($subscription->plan->name == 'professional') {
+        elseif ($subscription->plan?->name === 'professional') {
             $productLimit = 5;
         }
-        elseif ($subscription->plan->name == 'enterprise') {
+        elseif ($subscription->plan?->name === 'enterprise') {
             $productLimit = 7;
         }
 
