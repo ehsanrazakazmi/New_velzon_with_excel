@@ -85,3 +85,28 @@ test.describe.serial('Welcome email sign-in link', () => {
     await expect(page.locator('.alert-warning')).toContainText('already been used');
   });
 });
+
+/**
+ * Enrolment is only finished once the person has replaced the password, and
+ * that is the moment administrators are told about. Deliberately a separate
+ * describe: it needs the cached admin session, not the new user's.
+ */
+test.describe('Enrolment reaches the admin bell', () => {
+  test.use({ viewport: { width: 1920, height: 1080 } });
+
+  const fixture = fs.existsSync(FIXTURE)
+    ? JSON.parse(fs.readFileSync(FIXTURE, 'utf8'))
+    : null;
+
+  test.skip(!fixture, 'no welcome fixture generated');
+
+  test('setting the password notifies administrators', async ({ page }) => {
+    await page.goto('');
+    await page.locator('#page-header-notifications-dropdown').click();
+
+    const list = page.locator('#notification-list');
+    await expect(list).toBeVisible();
+    await expect(list).toContainText('Account activated');
+    await expect(list).toContainText(fixture.email);
+  });
+});

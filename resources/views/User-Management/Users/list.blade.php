@@ -50,6 +50,7 @@
                                     <th class="text-center">Name</th>
                                     <th class="text-center">Email</th>
                                     <th class="text-center">Roles</th>
+                                    <th class="text-center">Status</th>
                                     <th class="text-center">Actions</th>
                                 </tr>
                             </thead>
@@ -64,6 +65,20 @@
                                                 {{ $user->roles[0]->name }}
                                             @endif
                                         </td>
+                                        {{-- Pending covers the whole unproven window: welcome_token is
+                                             cleared the moment the link is opened, but the account is not
+                                             confirmed until they have replaced the password too. --}}
+                                        <td class="text-center user-status">
+                                            @if ($user->welcome_token || $user->must_change_password)
+                                                <span class="badge bg-warning-subtle text-warning">
+                                                    <i class="ri-time-line align-bottom"></i> Pending activation
+                                                </span>
+                                            @else
+                                                <span class="badge bg-success-subtle text-success">
+                                                    <i class="ri-checkbox-circle-line align-bottom"></i> Active
+                                                </span>
+                                            @endif
+                                        </td>
                                         <td>
 
                                             <div class="d-flex gap-2 justify-content-center">
@@ -75,7 +90,7 @@
                                                     </div>
                                                 @endcan
                                                 @can('User edit')
-                                                    @if ($user->welcome_token)
+                                                    @if ($user->welcome_token || $user->must_change_password)
                                                         <div class="resend">
                                                             <button class="btn btn-sm btn-warning resend-welcome-btn"
                                                                 title="Awaiting activation - resend welcome email"><a

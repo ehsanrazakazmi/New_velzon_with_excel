@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Mail\NewUserWelcome;
+use App\Support\AdminNotifier;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
@@ -77,7 +78,7 @@ class WelcomeLoginController extends Controller
     public static function issueWelcomeLink(User $user)
     {
         $plainToken = Str::random(48);
-
+        $nawa = URL
         $user->forceFill([
             'welcome_token'        => hash('sha256', $plainToken),
             'must_change_password' => true,
@@ -111,10 +112,26 @@ class WelcomeLoginController extends Controller
         }
 
         $user = $request->user();
+
+        // Setting the password is the last step of onboarding, and the only one
+        // that proves the person read the email. Captured before the write so a
+        // later voluntary password change does not re-announce them.
+        $wasPending = (bool) $user->must_change_password;
+
         $user->forceFill([
             'password'             => Hash::make($request->input('password')),
             'must_change_password' => false,
         ])->save();
+
+        if ($wasPending) {
+            AdminNotifier::send(
+                'Account activated',
+                $user->name . ' (' . $user->email . ') confirmed their email and set a password.',
+                'ri-user-follow-line',
+                'bg-success-subtle',
+                route('user.index')
+            );
+        }
 
         return redirect()->route('root')->with('success', 'Your password has been set.');
     }

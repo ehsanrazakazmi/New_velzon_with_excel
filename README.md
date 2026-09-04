@@ -8,7 +8,7 @@ A role-driven admin platform built on Laravel 8, covering user and permission ma
   <img alt="MySQL"      src="https://img.shields.io/badge/MySQL-8-4479A1?logo=mysql&logoColor=white">
   <img alt="Stripe"     src="https://img.shields.io/badge/Stripe-Cashier%2013-635BFF?logo=stripe&logoColor=white">
   <img alt="Bootstrap"  src="https://img.shields.io/badge/Bootstrap-5-7952B3?logo=bootstrap&logoColor=white">
-  <img alt="Playwright" src="https://img.shields.io/badge/Playwright-32%20E2E%20tests-2EAD33?logo=playwright&logoColor=white">
+  <img alt="Playwright" src="https://img.shields.io/badge/Playwright-44%20E2E%20tests-2EAD33?logo=playwright&logoColor=white">
 </p>
 
 ![Laptop Management module](docs/screenshots/laptop-management.png)
@@ -55,7 +55,7 @@ Points of engineering interest rather than a feature list:
 
 **Environment-aware mail guard.** Outside production the app refuses to deliver to the domains RFC 2606/6761 reserves for testing (`.test`, `.invalid`, `example.com`, …). Automated tests create accounts on those domains; without the guard, mail leaves the building and bounces into a real inbox.
 
-**End-to-end tests against a real browser.** 32 Playwright tests across 5 specs drive an actual Chromium instance through real login, form submission, and validation — covering the full CRUD lifecycle, permission gating for signed-out visitors, the notification pipeline, and the onboarding link including its single-use guarantee. Authentication is performed once and cached, so the suite completes in about 90 seconds.
+**End-to-end tests against a real browser.** 44 Playwright tests across 6 specs drive an actual Chromium instance through real login, form submission, and validation — covering the full CRUD lifecycle, permission gating for signed-out visitors, the notification pipeline, and the onboarding link including its single-use guarantee. Authentication is performed once and cached, so the whole suite completes in a few minutes.
 
 ---
 
@@ -180,6 +180,7 @@ Coverage:
 | `guest.spec.ts` | Signed-out visitors are redirected away from every protected route |
 | `laptop.spec.ts` | Full CRUD lifecycle, unique-constraint handling, form state |
 | `notifications.spec.ts` | Observer pipeline, unread counts, mark-as-read |
+| `user-management.spec.ts` | User CRUD, role replacement, email re-verification, activation state |
 | `welcome-link.spec.ts` | Onboarding link, single-use guarantee, activation gating, resend |
 
 Failures capture a screenshot, a video, and a trace under `test-results/`.
