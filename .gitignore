@@ -1,15 +1,43 @@
+# ---- Dependencies -------------------------------------------------------
+# Restored by `composer install` / `npm install`, never committed.
+/node_modules
+/vendor
 
+# ---- Build output -------------------------------------------------------
+/public/hot
+/public/storage
+/public/build
+/storage/*.key
+npm-debug.log
+yarn-error.log
 
-# Playwright
-node_modules/
-/test-results/
-/playwright-report/
-/blob-report/
-/playwright/.cache/
-/playwright/.auth/
-node_modules
-e2e/.fixtures/
-
-# Never commit secrets
+# ---- Secrets ------------------------------------------------------------
+# An ignore rule only stops NEW files. `.env` is already tracked on this
+# branch, so it also needs `git rm --cached .env` to actually leave the repo.
 .env
 .env.backup
+.env.*.local
+auth.json
+
+# ---- Test artifacts -----------------------------------------------------
+.phpunit.result.cache
+
+# Playwright, all regenerated on every run:
+#   playwright/.auth/  holds a live signed-in session cookie
+#   e2e/.fixtures/     holds a valid single-use sign-in link and password
+# Both are real credentials. Never commit them, public repo or not.
+/playwright/.auth/
+/playwright/.cache/
+/e2e/.fixtures/
+/playwright-report/
+/blob-report/
+/test-results/
+
+# ---- Local tooling ------------------------------------------------------
+/.idea
+/.vscode
+.DS_Store
+Thumbs.db
+Homestead.json
+Homestead.yaml
+docker-compose.override.yml
