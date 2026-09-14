@@ -55,7 +55,7 @@
 <script src="{{ URL::asset('/assets/js/app.min.js') }}"></script>
 <script src="https://js.stripe.com/v3/"></script>
 <script>
-    const stripe = Stripe('{{ env('STRIPE_KEY') }}')
+    const stripe = Stripe('{{ config('cashier.key') }}')
     const elements = stripe.elements()
     const cardElement = elements.create('card')
     cardElement.mount('#card-element')

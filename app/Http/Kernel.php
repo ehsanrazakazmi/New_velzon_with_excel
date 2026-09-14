@@ -70,5 +70,6 @@ class Kernel extends HttpKernel
         'role_or_permission' => \Spatie\Permission\Middleware\RoleOrPermissionMiddleware::class,
         'subscribed' => \App\Http\Middleware\SubscribedToPlan::class,
         'productrestrict' => \App\Http\Middleware\Productrestrict::class,
+        'password.set' => \App\Http\Middleware\EnsurePasswordIsSet::class,
     ];
 }

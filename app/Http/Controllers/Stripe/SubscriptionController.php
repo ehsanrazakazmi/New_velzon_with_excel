@@ -9,7 +9,7 @@ use App\Services\savePlan;
 use Illuminate\Http\Request;
 use Laravel\Cashier\Cashier;
 use App\Models\Plan as ModelPlan;
-use Laravel\Cashier\Subscription;
+use App\Models\Subscription;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 

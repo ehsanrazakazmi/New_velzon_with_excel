@@ -59,12 +59,14 @@ class RoleController extends Controller
 
     public function edit($id)
     {
-        $roles = Role::find(decrypt($id));
+        $roles = Role::findOrFail(decrypt($id));
         $permission = Permission::get();
 
-        // bellow will get the permissions through migrations
-        $rolePermissions = DB::table("role_has_permissions")->where("role_has_permissions.role_id",$id)
-            ->pluck('role_has_permissions.permission_id','role_has_permissions.permission_id')
+        // Which permissions to tick on the form. This previously queried with
+        // the encrypted route id, matched nothing, and rendered every box
+        // unchecked - so saving the form wiped the role's real permissions.
+        $rolePermissions = $roles->permissions
+            ->pluck('id', 'id')
             ->all();
 
         return view('User-Management.Roles.edit',compact('roles','permission','rolePermissions'));

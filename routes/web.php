@@ -1,7 +1,6 @@
 <?php
 
 use App\Jobs\SlowJob;
-use App\Http\Middleware\Subscribed;
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -13,6 +12,9 @@ use App\Http\Controllers\Stripe\SubscriptionController;
 use App\Http\Controllers\UserManagement\RoleController;
 use App\Http\Controllers\UserManagement\UserController;
 use App\Http\Controllers\ProductManagement\ProductController;
+use App\Http\Controllers\LaptopManagement\LaptopController;
+use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\WelcomeLoginController;
 use App\Http\Controllers\UserManagement\ProfileController;
 
 /*
@@ -32,7 +34,21 @@ Route::get('index/{locale}', [App\Http\Controllers\HomeController::class, 'lang'
 
 Route::get('/', [App\Http\Controllers\HomeController::class, 'root'])->name('root');
 
-Route::group(['middleware' => ['auth']], function () {
+// One-time signed sign-in link emailed to a newly created user.
+Route::get('welcome/{user}', [WelcomeLoginController::class, 'login'])
+    ->name('welcome.login')->middleware('signed');
+
+// Public resend, from the login page. Throttled and deliberately vague.
+Route::post('welcome/resend', [WelcomeLoginController::class, 'resend'])
+    ->name('welcome.resend')->middleware('throttle:5,1');
+
+Route::group(['middleware' => ['auth', 'password.set']], function () {
+
+    // Reachable while pinned - see EnsurePasswordIsSet::ALLOWED.
+    Route::get('set-password', [WelcomeLoginController::class, 'showSetPassword'])
+        ->name('password.set');
+    Route::post('set-password', [WelcomeLoginController::class, 'updatePassword'])
+        ->name('password.set.store');
 
     Route::controller(LinkedinController::class)->group(function (){
         Route::get('auth/linkedin', 'signin')->name('auth_linkedin');
@@ -63,6 +79,8 @@ Route::group(['middleware' => ['auth']], function () {
             Route::get('/edit/{id}', 'edit')->name('user.edit')->middleware('can:User edit');
             Route::patch('/update/{id}', 'update')->name('user.update')->middleware('can:User edit');
             Route::get('/delete/{id}', 'destroy')->name('user.destroy')->middleware('can:User delete');
+            Route::get('/resend-welcome/{id}', 'resendWelcome')
+                ->name('user.resendWelcome')->middleware('can:User edit');
             Route::get('excel', function () {
                 return view('excel');
             })->middleware('can:User list');
@@ -87,6 +105,23 @@ Route::group(['middleware' => ['auth']], function () {
             Route::get('export-product', 'exportproduct')->name('export-product');
             Route::post('import-product', 'importproduct')->name('import-product');
             Route::get('/generate-pdf',  'downloadpdf')->name('generate-pdf');
+        });
+    });
+
+    // notifications (topbar bell)
+    Route::post('notifications/read-all', [NotificationController::class, 'markAllRead'])
+        ->name('notifications.readAll');
+    Route::get('notifications/read/{id}', [NotificationController::class, 'read'])
+        ->name('notifications.read');
+
+    // laptop functionality
+    Route::controller(LaptopController::class)->group(function () {
+        Route::prefix('laptop')->group(function () {
+            Route::get('/list', 'index')->name('laptop.index')->middleware('can:Laptop list');
+            Route::post('/store', 'store')->name('laptop.store')->middleware('can:Laptop create');
+            Route::get('/edit/{id}', 'edit')->name('laptop.edit')->middleware('can:Laptop edit');
+            Route::patch('/update/{id}', 'update')->name('laptop.update')->middleware('can:Laptop edit');
+            Route::get('/delete/{id}', 'destroy')->name('laptop.destroy')->middleware('can:Laptop delete');
         });
     });
 
@@ -136,12 +171,12 @@ Route::group(['middleware' => ['auth']], function () {
                 return view('stripe.subscriptions.invoices');
         })->name('invoices.all');
     });
+
+    //Update User Details
+    Route::get('profile/view', [ProfileController::class, 'getprofile'])->name('view.profile');
+    Route::get('profile/edit/page', [ProfileController::class, 'viewedit'])->name('edit.profile');
+    Route::post('profile/edit/store', [ProfileController::class, 'store'])->name('store.profile');
 });
 
-
-//Update User Details
-Route::get('profile/view', [ProfileController::class, 'getprofile'])->name('view.profile');
-Route::get('profile/edit/page', [ProfileController::class, 'viewedit'])->name('edit.profile');
-Route::post('profile/edit/store', [ProfileController::class, 'store'])->name('store.profile');
 
 Route::get('{any}', [App\Http\Controllers\HomeController::class, 'index'])->name('index');

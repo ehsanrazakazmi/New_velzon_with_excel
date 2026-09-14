@@ -3,7 +3,7 @@
     <!-- LOGO -->
     <div class="navbar-brand-box">
         <!-- Dark Logo-->
-        <a href="index" class="logo logo-dark">
+        <a href="{{ route('root') }}" class="logo logo-dark">
             <span class="logo-sm">
                 <img src="{{ URL::asset('assets/images/logo-sm.png') }}" alt="" height="22">
             </span>
@@ -12,7 +12,7 @@
             </span>
         </a>
         <!-- Light Logo-->
-        <a href="index" class="logo logo-light">
+        <a href="{{ route('root') }}" class="logo logo-light">
             <span class="logo-sm">
                 <img src="{{ URL::asset('assets/images/logo-sm.png') }}" alt="" height="22">
             </span>
@@ -78,6 +78,23 @@
 
 
 
+                            </ul>
+                        </div>
+                    </li>
+                @endcan
+
+                @can('Laptop list')
+                    <li class="nav-item">
+                        <a class="nav-link menu-link" href="#sidebarLaptops" data-bs-toggle="collapse" role="button"
+                            aria-expanded="false" aria-controls="sidebarLaptops">
+                            <i class="ri-macbook-line"></i> <span>Laptop Management</span>
+                        </a>
+                        <div class="collapse menu-dropdown" id="sidebarLaptops">
+                            <ul class="nav nav-sm flex-column">
+                                <li class="nav-item">
+                                    <a href="{{ route('laptop.index') }}"
+                                        class="nav-link {{ request()->is('laptop/*') ? 'active' : '' }}">Laptops</a>
+                                </li>
                             </ul>
                         </div>
                     </li>

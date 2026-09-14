@@ -4,7 +4,6 @@ namespace Laravel\Cashier;
 
 use Carbon\Carbon;
 use LogicException;
-use App\Models\Plan;
 use DateTimeInterface;
 use Carbon\CarbonInterface;
 use InvalidArgumentException;
@@ -41,7 +40,7 @@ class Subscription extends Model
      *
      * @var array
      */
-    protected $with = ['items', 'plan'];
+    protected $with = ['items'];
 
     /**
      * The attributes that should be cast to native types.
@@ -71,10 +70,6 @@ class Subscription extends Model
         return $this->owner();
     }
 
-    public function plan()
-    {
-        return $this->hasOne(Plan::class, 'plan_id', 'stripe_price');
-    }
     /**
      * Get the model related to the subscription.
      *
