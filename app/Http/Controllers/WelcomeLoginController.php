@@ -78,7 +78,7 @@ class WelcomeLoginController extends Controller
     public static function issueWelcomeLink(User $user)
     {
         $plainToken = Str::random(48);
-        $nawa = URL
+
         $user->forceFill([
             'welcome_token'        => hash('sha256', $plainToken),
             'must_change_password' => true,

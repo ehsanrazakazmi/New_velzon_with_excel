@@ -42,7 +42,10 @@ class Kernel extends HttpKernel
         ],
 
         'api' => [
-            // \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
+            // Turns a request from a listed stateful domain into a session
+            // request, so the Next.js frontend authenticates by cookie rather
+            // than by bearer token. Requests from anywhere else stay stateless.
+            \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
             'throttle:api',
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
         ],

@@ -19,7 +19,10 @@ return [
 
     'allowed_methods' => ['*'],
 
-    'allowed_origins' => ['*'],
+    // A wildcard is illegal once credentials are involved - the browser rejects
+    // `Access-Control-Allow-Origin: *` on any request carrying cookies. The
+    // Next.js origin has to be named explicitly.
+    'allowed_origins' => [env('FRONTEND_URL', 'http://localhost:3000')],
 
     'allowed_origins_patterns' => [],
 
@@ -29,6 +32,8 @@ return [
 
     'max_age' => 0,
 
-    'supports_credentials' => false,
+    // Required for Sanctum's SPA mode: without it the browser will not send or
+    // store the session cookie, and every request arrives unauthenticated.
+    'supports_credentials' => true,
 
 ];
